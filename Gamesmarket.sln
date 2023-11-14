@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gamesmarket", "Gamesmarket\Gamesmarket.csproj", "{2F905BEA-E5B0-4965-8C49-75738DB16569}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{40ED7621-9DC5-4DD7-AF05-C2E7923B907A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gamesmarket.Domain", "Gamesmarket.Domain\Gamesmarket.Domain.csproj", "{9E73D199-DA75-4A8B-87A3-CED27C8D098E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{9B2CDC16-A2FD-4FCF-8213-101E4E97101B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gamesmarket.DAL", "GamesMarket.DAL\Gamesmarket.DAL.csproj", "{E2373E44-8E78-4767-9A77-E94AFA7B0E59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{1A0C9B3C-DEA4-4327-A07C-E0F5C10B76FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gamesmarket.Service", "Gamesmarket.Service\Gamesmarket.Service.csproj", "{6F84963F-EDD1-4397-ABEA-949757E9C7A6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F905BEA-E5B0-4965-8C49-75738DB16569}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F905BEA-E5B0-4965-8C49-75738DB16569}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F905BEA-E5B0-4965-8C49-75738DB16569}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F905BEA-E5B0-4965-8C49-75738DB16569}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E73D199-DA75-4A8B-87A3-CED27C8D098E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E73D199-DA75-4A8B-87A3-CED27C8D098E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E73D199-DA75-4A8B-87A3-CED27C8D098E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E73D199-DA75-4A8B-87A3-CED27C8D098E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2373E44-8E78-4767-9A77-E94AFA7B0E59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2373E44-8E78-4767-9A77-E94AFA7B0E59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2373E44-8E78-4767-9A77-E94AFA7B0E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2373E44-8E78-4767-9A77-E94AFA7B0E59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F84963F-EDD1-4397-ABEA-949757E9C7A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F84963F-EDD1-4397-ABEA-949757E9C7A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F84963F-EDD1-4397-ABEA-949757E9C7A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F84963F-EDD1-4397-ABEA-949757E9C7A6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9E73D199-DA75-4A8B-87A3-CED27C8D098E} = {40ED7621-9DC5-4DD7-AF05-C2E7923B907A}
+		{E2373E44-8E78-4767-9A77-E94AFA7B0E59} = {9B2CDC16-A2FD-4FCF-8213-101E4E97101B}
+		{6F84963F-EDD1-4397-ABEA-949757E9C7A6} = {1A0C9B3C-DEA4-4327-A07C-E0F5C10B76FF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {228E929F-E31A-4E34-AEFA-009528167D48}
+	EndGlobalSection
+EndGlobal
