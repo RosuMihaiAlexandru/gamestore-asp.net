@@ -27,7 +27,7 @@ namespace Gamesmarket.Service.Implementations
                 var game = await _gameRepository.Get(id);//Getting a game by ID
 				if (game == null)//If the game is not found, set appropriate status and description
 				{
-					baseResponse.Description = "User not found";
+					baseResponse.Description = "Game not found";
                     baseResponse.StatusCode = StatusCode.UserNotFound;
                     return baseResponse;
                 }
@@ -37,10 +37,11 @@ namespace Gamesmarket.Service.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<Game>();
+                Console.WriteLine($"Exception in GetGame: {ex}");
+                return new BaseResponse<Game>
                 {
-                    baseResponse.Description = $"[GetGame] : {ex.Message}";
-                    baseResponse.StatusCode = StatusCode.InternalServerError;
+                    Description = $"[GetGame] : {ex.Message}",
+                    StatusCode = StatusCode.InternalServerError
                 };
             }
         }
@@ -54,7 +55,7 @@ namespace Gamesmarket.Service.Implementations
                 var game = new Game()
 				{//Create a new Game object based on the GameViewModel
 					Description = gameViewModel.Description,
-                    ReleaseDate = DateTime.Now,
+                    ReleaseDate = gameViewModel.ReleaseDate,
                     Developer = gameViewModel.Developer,
                     Price = gameViewModel.Price,
                     Name = gameViewModel.Name,
@@ -81,7 +82,7 @@ namespace Gamesmarket.Service.Implementations
                 var game = await _gameRepository.Get(id);
                 if (game == null)
                 {
-                    baseResponse.Description = "User not found";
+                    baseResponse.Description = "Game not found";
                     baseResponse.StatusCode = StatusCode.UserNotFound;
                     return baseResponse;
                 }
@@ -91,10 +92,10 @@ namespace Gamesmarket.Service.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<bool>();
+                return new BaseResponse<bool>
                 {
-                    baseResponse.Description = $"[DeleteGame] : {ex.Message}";
-                    baseResponse.StatusCode = StatusCode.InternalServerError;
+                    Description = $"[DeleteGame] : {ex.Message}",
+                    StatusCode = StatusCode.InternalServerError
                 };
             }
         }
@@ -108,7 +109,7 @@ namespace Gamesmarket.Service.Implementations
                 var game = await _gameRepository.GetByName(name);//Get a game by its name 
 				if (game == null)
                 {
-                    baseResponse.Description = "User not found";
+                    baseResponse.Description = "Game not found";
                     baseResponse.StatusCode = StatusCode.UserNotFound;
                     return baseResponse;
                 }
@@ -117,10 +118,10 @@ namespace Gamesmarket.Service.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<Game>();
+                return new BaseResponse<Game>
                 {
-                    baseResponse.Description = $"[GetGameByName] : {ex.Message}";
-                    baseResponse.StatusCode = StatusCode.InternalServerError;
+                    Description = $"[GetGame] : {ex.Message}",
+                    StatusCode = StatusCode.InternalServerError
                 };
             }
         }
@@ -147,10 +148,10 @@ namespace Gamesmarket.Service.Implementations
             }
             catch(Exception ex)
             {
-                return new BaseResponse<IEnumerable<Game>>();
+                return new BaseResponse<IEnumerable<Game>>
                 {
-                    baseResponse.Description = $"[GetGames] : {ex.Message}";
-                    baseResponse.StatusCode = StatusCode.InternalServerError;
+                    Description = $"[GetGames] : {ex.Message}",
+                    StatusCode = StatusCode.InternalServerError
                 };
             }
         }
@@ -166,7 +167,6 @@ namespace Gamesmarket.Service.Implementations
                 {
                     baseResponse.StatusCode = StatusCode.GameNotFound;
 					baseResponse.Description = "Game not found";
-
 					return baseResponse;
                 }
 				//Updated game properties using data from GameViewModel
@@ -174,20 +174,24 @@ namespace Gamesmarket.Service.Implementations
                 game.Developer = model.Developer;
                 game.ReleaseDate = model.ReleaseDate;
 				game.Price = model.Price;
+                game.Name = model.Name; 
+                game.GameGenre = (GameGenre)Convert.ToInt32(model.GameGenre);
 
-				// Call the repository method to update the game in db
-				await _gameRepository.Update(game);
-				return baseResponse;
+                // Call the repository method to update the game in db
+                await _gameRepository.Update(game);
 
-				//GameGenre
+                baseResponse.Data = game;
+                baseResponse.StatusCode = StatusCode.OK;
+                return baseResponse;
+
 
 			}
 			catch (Exception ex)
 			{
-				return new BaseResponse<Game>();
+				return new BaseResponse<Game>
 				{
-					baseResponse.Description = $"[Edit] : {ex.Message}";
-					baseResponse.StatusCode = StatusCode.InternalServerError;
+					Description = $"[Edit] : {ex.Message}",
+					StatusCode = StatusCode.InternalServerError
 				};
 			}
 		}

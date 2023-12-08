@@ -4,11 +4,17 @@ using GamesMarket.DAL;
 using GamesMarket.DAL.Interfaces;
 using GamesMarket.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+builder.Services.AddEndpointsApiExplorer();
 
 // DataBase connection
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -16,9 +22,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
 
 );
-
+//Setting up dependency injection for the interface and its implementation
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IGameService, GameService>();
+
+builder.Services.AddCors(o => o.AddPolicy("frontend", builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
 
 var app = builder.Build();
 
@@ -30,18 +43,19 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+app.UseDefaultFiles(); // Middleware to handle requests when a client tries to retrieve the contents of a directory
 app.UseStaticFiles();
+app.UseHttpsRedirection();
+
+app.UseCors("frontend");
 
 app.UseRouting();
-
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllers(); // Specifies to use controllers to process requests
+app.MapFallbackToFile("/index.html"); // If no previous middleware has processed the request, this middleware returns the file ("")
 
-//Creates a scope for accessing services in the dependency container
+// Creates a scope for accessing services in the dependency container, guaranteed db creation at application startup
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();

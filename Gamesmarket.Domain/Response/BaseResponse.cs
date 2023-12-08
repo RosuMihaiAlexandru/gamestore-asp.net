@@ -6,7 +6,7 @@ namespace Gamesmarket.Domain.Response
     {
         public string Description { get; set; }
 
-        public StatusCode StatusCode { get; set; }
+        public StatusCode StatusCode { get; set; } = StatusCode.OK;
 
         public T Data { get; set; }
     }

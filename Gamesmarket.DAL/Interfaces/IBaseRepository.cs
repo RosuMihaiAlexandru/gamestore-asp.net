@@ -1,5 +1,5 @@
-﻿
-namespace GamesMarket.DAL.Interfaces
+﻿namespace GamesMarket.DAL.Interfaces
+
 {
     public interface IBaseRepository<T>
     { //Methods for performing CRUD operations on entities of type T

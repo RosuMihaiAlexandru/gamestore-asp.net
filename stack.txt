@@ -1,0 +1,5 @@
+backend
+.net asp core + sql server + EF
+
+frontend
+react + bootstrap + react-router-dom + axios + react-query

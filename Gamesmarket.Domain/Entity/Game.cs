@@ -9,7 +9,7 @@ namespace Gamesmarket.Domain.Entity
         public string Developer { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        public DateTimeOffset ReleaseDate { get; set; }
         public GameGenre GameGenre { get; set; }
 
     }

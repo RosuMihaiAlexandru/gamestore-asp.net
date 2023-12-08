@@ -8,7 +8,7 @@ namespace Gamesmarket.Domain.ViewModel.Game
         public int Id { get; set; }
 
         [Required]
-        [MaxLength]
+        [MaxLength(255)]
         public string Name { get; set; }
 
         public string Developer { get; set; }
@@ -17,7 +17,7 @@ namespace Gamesmarket.Domain.ViewModel.Game
 
         public decimal Price { get; set; }
 
-        public DateTime ReleaseDate { get; set; }
+        public DateTimeOffset ReleaseDate { get; set; }
 
         public string GameGenre { get; set; }
 
