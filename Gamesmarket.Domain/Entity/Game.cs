@@ -11,6 +11,7 @@ namespace Gamesmarket.Domain.Entity
         public decimal Price { get; set; }
         public DateTimeOffset ReleaseDate { get; set; }
         public GameGenre GameGenre { get; set; }
+        public string ImagePath { get; set; }
 
     }
 

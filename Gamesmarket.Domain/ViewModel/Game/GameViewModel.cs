@@ -1,14 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Gamesmarket.Domain.ViewModel.Game
 {
     public class GameViewModel
     {//Model to simplify data transfer between service and controller
         public int Id { get; set; }
-
-        [Required]
-        [MaxLength(255)]
+        
         public string Name { get; set; }
 
         public string Developer { get; set; }
@@ -20,6 +17,8 @@ namespace Gamesmarket.Domain.ViewModel.Game
         public DateTimeOffset ReleaseDate { get; set; }
 
         public string GameGenre { get; set; }
+
+        public IFormFile ImageFile { get; set; }
 
     }
 }

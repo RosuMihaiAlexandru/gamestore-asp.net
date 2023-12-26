@@ -25,6 +25,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //Setting up dependency injection for the interface and its implementation
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
 builder.Services.AddCors(o => o.AddPolicy("frontend", builder =>
 {

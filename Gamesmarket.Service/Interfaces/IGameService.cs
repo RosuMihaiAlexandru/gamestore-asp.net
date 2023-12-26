@@ -1,6 +1,7 @@
 ﻿using Gamesmarket.Domain.Entity;
 using Gamesmarket.Domain.Response;
 using Gamesmarket.Domain.ViewModel.Game;
+using Microsoft.AspNetCore.Http;
 
 namespace Gamesmarket.Service.Interfaces
 {
@@ -17,5 +18,7 @@ namespace Gamesmarket.Service.Interfaces
         Task<IBaseResponse<Game>> GetGameByName(string name);
 
 		Task<IBaseResponse<Game>> Edit(int id, GameViewModel model);
-	}
+
+        Task<string> SaveGameImage(IFormFile imageFile);
+    }
 }

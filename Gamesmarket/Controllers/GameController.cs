@@ -1,12 +1,10 @@
 ﻿using Gamesmarket.Domain.ViewModel.Game;
 using Gamesmarket.Service.Interfaces;
-using GamesMarket.DAL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gamesmarket.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class GameController : ControllerBase
@@ -52,34 +50,26 @@ namespace Gamesmarket.Controllers
         }
 
         [HttpPost("CreateGame")]
-        public async Task<IActionResult> CreateGame(GameViewModel model)
+        public async Task<IActionResult> CreateGame([FromForm] GameViewModel model)
         {
-            if (ModelState.IsValid)//Operation must satisfyer properties of GameViewModel attributes
-            {
-                var response = await _gameService.CreateGame(model);
-                if (response.StatusCode == Domain.Enum.StatusCode.OK)
-                {
-                    return Ok(response);
-                }
-                return BadRequest("Operation was not successful");
-            }
-            return BadRequest(ModelState);
+             var response = await _gameService.CreateGame(model);
+             if (response.StatusCode == Domain.Enum.StatusCode.OK)
+             {
+                 return Ok(response);
+             }
+             return BadRequest("Operation was not successful");
         }
 
         [HttpPatch("EditGame/{id}")]
-        public async Task<IActionResult> EditGame(int id, GameViewModel model)
+        public async Task<IActionResult> EditGame(int id, [FromForm] GameViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var response = await _gameService.Edit(id, model);
-                if (response.StatusCode == Domain.Enum.StatusCode.OK)
-                {
-                    return Ok(response);
-                }
-                return BadRequest("Operation was not successful");
-            }
-
-            return BadRequest(ModelState);
+            var response = await _gameService.Edit(id, model);
+             if (response.StatusCode == Domain.Enum.StatusCode.OK)
+             {
+                 return Ok(response);
+             }
+             return BadRequest("Operation was not successful");
         }
+
     }
 }
