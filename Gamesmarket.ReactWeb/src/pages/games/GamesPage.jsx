@@ -25,8 +25,11 @@ function GamesPage() {
       </div>
       <div className='row'>
         <div className='col'>
-          {isLoading && <p>Data is loading...</p>}
-          {!isLoading && (
+        {isLoading && <p>Data is loading...</p>}
+          {!isLoading && !data && (
+            <p>No games available.</p>
+          )}
+          {!isLoading && data && data.length > 0 && (
             <div className="card rounded-4 shadow-sm">
               <div className="card-body">
                 <GameList games={data} onDelete={handleDelete} onEdit={openEditModal} />

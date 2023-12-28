@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MyModal from './MyModal';
 import MyInput from './input/MyInput';
 import MyButton from './button/MyButton';
 import ModalSelect from './select/ModalSelect';
 import { GameGenreOptions } from '../../components/GameGenre';
+import MyCreateInput from './input/MyCreateInput';
+import { useGameHandlers } from '../../Utils/CRUDhandlers';
 
 const ModalEdit = ({ visible, setVisible, selectedGame, handleEdit, handleEditChange}) => {
+  const {handleImageChange} = useGameHandlers();
+  const [previewImage, setPreviewImage] = useState(null);
+
   const handleSubmit = (e) => {
       e.preventDefault();
       handleEdit(selectedGame.id);
@@ -75,8 +80,22 @@ const ModalEdit = ({ visible, setVisible, selectedGame, handleEdit, handleEditCh
               options={GameGenreOptions}
             />
           </div>
+          <span>Picture must be less than 2 megabyte and have format of .jpg .webp .png</span>
+          <div className="col-md-6">
+            <span>Image:</span>
+            <MyCreateInput type="file" onChange={(e) => handleImageChange(e, setPreviewImage)} />
+          </div>
+          {previewImage && (
+            <div className="text-center mt-2">
+              <img
+                src={previewImage}
+                alt="Selected"
+                style={{ maxWidth: '100%', maxHeight: '200px' }}
+              />
+            </div>
+          )}
           <div className=" text-end">
-                <MyButton type="submit">Update Game</MyButton>
+            <MyButton type="submit">Update Game</MyButton>
           </div>
         </form>
       )}
@@ -85,3 +104,4 @@ const ModalEdit = ({ visible, setVisible, selectedGame, handleEdit, handleEditCh
 };
   
 export default ModalEdit;
+

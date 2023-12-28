@@ -10,7 +10,7 @@ const MyCreateInput = ({ type, placeholder, name, value, onChange, min, max }) =
       onChange={onChange}
       min={min}
       max={max}
-      className="form-control"
+      className={type === 'file' ? 'form-control-file' : 'form-control'}
     />
   );
 };
