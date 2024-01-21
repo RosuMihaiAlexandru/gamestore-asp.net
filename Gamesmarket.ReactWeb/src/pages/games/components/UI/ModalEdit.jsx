@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import MyModal from './MyModal';
+import MyModal from './Mymodal';
 import MyInput from './input/MyInput';
 import MyButton from './button/MyButton';
 import ModalSelect from './select/ModalSelect';
-import { GameGenreOptions } from '../../components/GameGenre';
 import MyCreateInput from './input/MyCreateInput';
+import { GameGenreOptions } from '../../components/GameGenre';
 import { useGameHandlers } from '../../Utils/CRUDhandlers';
 
 const ModalEdit = ({ visible, setVisible, selectedGame, handleEdit, handleEditChange}) => {

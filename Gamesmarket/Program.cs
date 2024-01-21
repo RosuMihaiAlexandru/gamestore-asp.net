@@ -1,9 +1,16 @@
+using Gamesmarket.Domain.Entity;
 using Gamesmarket.Service.Implementations;
 using Gamesmarket.Service.Interfaces;
 using GamesMarket.DAL;
 using GamesMarket.DAL.Interfaces;
 using GamesMarket.DAL.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,20 +26,82 @@ builder.Services.AddEndpointsApiExplorer();
 // DataBase connection
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString)
+    options.UseSqlServer(connectionString));
 
-);
 //Setting up dependency injection for the interface and its implementation
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddCors(o => o.AddPolicy("frontend", builder =>
+// JWT Bearer authentication
+builder.Services.AddAuthentication(opt => {
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {// Configure JWT Bearer authentication options
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"]!,
+            ValidAudience = builder.Configuration["Jwt:Audience"]!,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!))
+        };
+    });
+// Authorization policy for authenticated users
+builder.Services.AddAuthorization(options => options.DefaultPolicy =
+    new AuthorizationPolicyBuilder
+            (JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .Build());
+
+// Identity setup for user management
+builder.Services.AddIdentity<User, IdentityRole<long>>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddUserManager<UserManager<User>>()
+    .AddSignInManager<SignInManager<User>>();
+
+// Cross-Origin Resource Sharing configuration
+builder.Services.AddCors(o => o.AddPolicy("frontend", opt =>
 {
-    builder.AllowAnyOrigin()
-           .AllowAnyMethod()
-           .AllowAnyHeader();
+    opt.WithOrigins(builder.Configuration.GetSection("Frontend:Urls").Get<string[]>()!);
+    opt.AllowAnyMethod();
+    opt.AllowAnyHeader();
+    opt.AllowCredentials();
 }));
+
+// Swagger - localhost:7202/swagger/index.html
+builder.Services.AddSwaggerGen(option =>
+{
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Gamesmarket", Version = "v1" });
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme// Configure security definition for Bearer token
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement// Configure security definition for Bearer token
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -44,13 +113,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseDefaultFiles(); // Middleware to handle requests when a client tries to retrieve the contents of a directory
-app.UseStaticFiles();
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseDefaultFiles(); // Middleware to handle requests when a client tries to retrieve the contents of a directory
 
 app.UseCors("frontend");
 
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers(); // Specifies to use controllers to process requests

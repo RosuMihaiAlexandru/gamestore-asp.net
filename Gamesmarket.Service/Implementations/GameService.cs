@@ -60,8 +60,8 @@ namespace Gamesmarket.Service.Implementations
                 var imagePath = await SaveGameImage(gameViewModel.ImageFile);
 
                 var game = new Game()
-				{//Create a new Game object based on the GameViewModel
-					Description = gameViewModel.Description,
+                {//Create a new Game object based on the GameViewModel
+                    Description = gameViewModel.Description,
                     ReleaseDate = gameViewModel.ReleaseDate,
                     Developer = gameViewModel.Developer,
                     Price = gameViewModel.Price,
@@ -70,7 +70,20 @@ namespace Gamesmarket.Service.Implementations
                     ImagePath = imagePath,
                 };
                 await _gameRepository.Create(game); //Call repository method to create the game
-			}
+
+                // Show data of created game after game created
+                var gameViewModelData = new GameViewModel
+                {
+                    Id = game.Id,
+                    Description = game.Description,
+                    ReleaseDate = game.ReleaseDate,
+                    Developer = game.Developer,
+                    Price = game.Price,
+                    Name = game.Name,
+                    GameGenre = ((int)game.GameGenre).ToString(),
+                };
+                baseResponse.Data = gameViewModelData;
+            }
             catch (InvalidOperationException ex) // Exception due to invalid image format or size
             {
                 baseResponse.Description = ex.Message;
@@ -88,7 +101,10 @@ namespace Gamesmarket.Service.Implementations
         // Method for deleting one game by id 
         public async Task<IBaseResponse<bool>> DeleteGame(int id)
         {
-            var baseResponse = new BaseResponse<bool>();
+            var baseResponse = new BaseResponse<bool>()
+            {
+                Data = true
+            };
             try
             {
                 var game = await _gameRepository.Get(id);
@@ -96,6 +112,8 @@ namespace Gamesmarket.Service.Implementations
                 {
                     baseResponse.Description = "Game not found";
                     baseResponse.StatusCode = StatusCode.UserNotFound;
+                    baseResponse.Data = false;
+
                     return baseResponse;
                 }
 
@@ -215,7 +233,6 @@ namespace Gamesmarket.Service.Implementations
                     }
                     catch (Exception ex)
                     {
-                        // Handle the exception if needed
                         Console.WriteLine($"Error deleting existing image file: {ex.Message}");
                     }
                 }
