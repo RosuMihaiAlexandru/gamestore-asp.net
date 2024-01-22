@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Gamesmarket.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/games")]
     [ApiController]
     public class GameController : ControllerBase
     {
@@ -15,7 +15,7 @@ namespace Gamesmarket.Controllers
             _gameService = gameService;
         }
 
-        [HttpGet("GetGames")]
+        [HttpGet("getGames")]
         public async Task<IActionResult> GetGames()
         {
             var response = await _gameService.GetGames(); //Get the list of games from the service
@@ -26,7 +26,7 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");  //Redirect to error page if operation was not successful
         }
 
-        [HttpGet("GetGame/{id}")]
+        [HttpGet("getGame/{id}")]
         public async Task<IActionResult> GetGame(int id)
         {
             var responce = await _gameService.GetGame(id); //Get a single game by its id from the service
@@ -37,7 +37,7 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("delete/{id}")]
 		public async Task<IActionResult> Delete (int id)
         {
             var response = await _gameService.DeleteGame(id); //Delete a game by its id using the service
@@ -48,7 +48,7 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
-        [HttpPost("CreateGame")]
+        [HttpPost("createGame")]
         public async Task<IActionResult> CreateGame([FromForm] GameViewModel model)
         {
             var response = await _gameService.CreateGame(model);
@@ -59,7 +59,7 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
-        [HttpPatch("EditGame/{id}")]
+        [HttpPatch("editGame/{id}")]
         public async Task<IActionResult> EditGame(int id, [FromForm] GameViewModel model)
         {
             var response = await _gameService.Edit(id, model);

@@ -68,10 +68,10 @@ builder.Services.AddIdentity<User, IdentityRole<long>>()
 // Cross-Origin Resource Sharing configuration
 builder.Services.AddCors(o => o.AddPolicy("frontend", opt =>
 {
-    opt.WithOrigins(builder.Configuration.GetSection("Frontend:Urls").Get<string[]>()!);
-    opt.AllowAnyMethod();
-    opt.AllowAnyHeader();
-    opt.AllowCredentials();
+    opt.WithOrigins("http://localhost:3000")
+       .AllowAnyHeader()
+       .AllowAnyMethod()
+       .AllowCredentials();
 }));
 
 // Swagger - localhost:7202/swagger/index.html
@@ -120,9 +120,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseDefaultFiles(); // Middleware to handle requests when a client tries to retrieve the contents of a directory
 
+app.UseRouting();
 app.UseCors("frontend");
 
-app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
