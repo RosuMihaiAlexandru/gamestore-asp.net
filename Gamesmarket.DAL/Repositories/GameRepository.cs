@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GamesMarket.DAL.Repositories
 {
-    public class GameRepository : IGameRepository
+    public class GameRepository : IBaseRepository<Game>
     {//Implementation of async CRUD operations
         private readonly ApplicationDbContext _db;
         public GameRepository(ApplicationDbContext db)
@@ -37,11 +37,6 @@ namespace GamesMarket.DAL.Repositories
             return true;
         }
 
-        public async Task<Game> GetByName(string name)
-        {
-            return await _db.Games.FirstOrDefaultAsync(x => x.Name == name);
-        }
-
 		public async Task<Game> Update(Game entity)
 		{
 			_db.Update(entity);
@@ -49,5 +44,9 @@ namespace GamesMarket.DAL.Repositories
 
             return entity;
 		}
-	}
+        public IQueryable<Game> GetAll()
+        {
+            return _db.Games;
+        }
+    }
 }

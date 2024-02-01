@@ -6,17 +6,18 @@ using Gamesmarket.Service.Interfaces;
 using GamesMarket.DAL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gamesmarket.Service.Implementations
 {
     public class GameService : IGameService
     {
-        private readonly IGameRepository _gameRepository;
+        private readonly IBaseRepository<Game> _gameRepository;
         private readonly IImageService _imageService;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
         //DI of IGameRepository in GameService class constructor
-        public GameService(IGameRepository gameRepository, IImageService imageService, IWebHostEnvironment hostingEnvironment)
+        public GameService(IBaseRepository<Game> gameRepository, IImageService imageService, IWebHostEnvironment hostingEnvironment)
         {
             _gameRepository = gameRepository;
             _imageService = imageService;
@@ -158,8 +159,10 @@ namespace Gamesmarket.Service.Implementations
             var baseResponse = new BaseResponse<Game>();
             try
             {
-                var game = await _gameRepository.GetByName(name);//Get a game by its name 
-				if (game == null)
+                var games = await _gameRepository.GetAll().Where(g => g.Name == name).ToListAsync();
+                var game = games.FirstOrDefault();
+
+                if (game == null)
                 {
                     baseResponse.Description = "Game not found";
                     baseResponse.StatusCode = StatusCode.UserNotFound;
@@ -276,6 +279,7 @@ namespace Gamesmarket.Service.Implementations
 			}
 		}
 
+        // Method for image saving 
         public async Task<string> SaveGameImage(IFormFile imageFile)
         {
             // Save the image and return the path

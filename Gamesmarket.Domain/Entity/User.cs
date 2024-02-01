@@ -8,5 +8,7 @@ namespace Gamesmarket.Domain.Entity
 
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
+
+        public Cart Cart { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using Gamesmarket.DAL.Repositories;
 using Gamesmarket.Domain.Entity;
 using Gamesmarket.Service.Implementations;
 using Gamesmarket.Service.Interfaces;
@@ -29,10 +30,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 //Setting up dependency injection for the interface and its implementation
-builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<IBaseRepository<Game>, GameRepository>();
+builder.Services.AddScoped<IBaseRepository<Cart>, CartRepository>();
+builder.Services.AddScoped<IBaseRepository<Order>, OrderRepository>();
+
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 // JWT Bearer authentication
 builder.Services.AddAuthentication(opt => {
@@ -52,12 +58,29 @@ builder.Services.AddAuthentication(opt => {
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!))
         };
     });
-// Authorization policy for authenticated users
-builder.Services.AddAuthorization(options => options.DefaultPolicy =
-    new AuthorizationPolicyBuilder
-            (JwtBearerDefaults.AuthenticationScheme)
+
+builder.Services.AddAuthorization(options =>
+{
+    // Adding a policy for authorized users with "Admin" role
+    options.AddPolicy("AdminPolicy", new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
         .RequireAuthenticatedUser()
+        .RequireRole("Administrator")
         .Build());
+
+    // Adding a policy for authorized users with "Moderator"and "Admin" roles
+    options.AddPolicy("StaffPolicy", new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .RequireRole("Moderator", "Administrator")
+        .Build());
+
+    // Authorization policy for default authenticated users ("User" role)
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .Build();
+});
 
 // Identity setup for user management
 builder.Services.AddIdentity<User, IdentityRole<long>>()

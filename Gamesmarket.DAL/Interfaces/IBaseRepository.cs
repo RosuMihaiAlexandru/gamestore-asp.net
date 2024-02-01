@@ -12,5 +12,7 @@
         Task<bool> Delete(T entity);
 
         Task<T> Update (T entity);
+
+        IQueryable<T> GetAll();
     }
 }

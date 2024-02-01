@@ -12,7 +12,7 @@ using Gamesmarket.Service.Extensions;
 namespace Gamesmarket.Controllers
 {
     [ApiController]
-    [Route("api/accounts")]
+    [Route("api/account")]
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
@@ -107,6 +107,16 @@ namespace Gamesmarket.Controllers
             // Give to the new user the 'User' role
             await _userManager.AddToRoleAsync(findUser, RoleConsts.User);
 
+            // Create a cart for new user
+            var cart = new Cart
+            {
+                UserId = findUser.Id,
+            };
+
+            // Save the cart to db
+            _context.Carts.Add(cart);
+            await _context.SaveChangesAsync();
+
             // Authenticate the user and return the authentication response
             return await Authenticate(new AuthRequest
             {
@@ -161,7 +171,6 @@ namespace Gamesmarket.Controllers
             });
         }
 
-        [Authorize]
         [HttpPost]
         [Route("revoke/{username}")]
         public async Task<IActionResult> Revoke(string username)
@@ -175,7 +184,7 @@ namespace Gamesmarket.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize("AdminPolicy")]
         [HttpPost]
         [Route("revoke-all")]
         public async Task<IActionResult> RevokeAll()

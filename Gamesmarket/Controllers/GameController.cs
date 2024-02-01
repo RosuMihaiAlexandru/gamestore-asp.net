@@ -1,10 +1,11 @@
 ﻿using Gamesmarket.Domain.ViewModel.Game;
 using Gamesmarket.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gamesmarket.Controllers
 {
-    [Route("api/games")]
+    [Route("api/game")]
     [ApiController]
     public class GameController : ControllerBase
     {
@@ -29,14 +30,15 @@ namespace Gamesmarket.Controllers
         [HttpGet("getGame/{id}")]
         public async Task<IActionResult> GetGame(int id)
         {
-            var responce = await _gameService.GetGame(id); //Get a single game by its id from the service
-			if (responce.StatusCode == Domain.Enum.StatusCode.OK)
+            var response = await _gameService.GetGame(id); //Get a single game by its id from the service
+			if (response.StatusCode == Domain.Enum.StatusCode.OK)
             {
-                return Ok(responce.Data);
+                return Ok(response.Data);
             }
             return BadRequest("Operation was not successful");
         }
 
+        [Authorize]
         [HttpDelete("delete/{id}")]
 		public async Task<IActionResult> Delete (int id)
         {
@@ -48,6 +50,7 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
+        [Authorize]
         [HttpPost("createGame")]
         public async Task<IActionResult> CreateGame([FromForm] GameViewModel model)
         {
@@ -59,6 +62,7 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
+        [Authorize]
         [HttpPatch("editGame/{id}")]
         public async Task<IActionResult> EditGame(int id, [FromForm] GameViewModel model)
         {
