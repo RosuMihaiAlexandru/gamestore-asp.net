@@ -1,11 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { GetGame } from '../../common/services/api/games/GamesApi';
+import { getGame } from '../../common/services/api/game/GameApi';
 
 const GameDetailsPage = () => {
   const { id } = useParams();
-  const { data: game, isLoading } = useQuery(['game', id], () => GetGame(id));
+  const { data: game, isLoading } = useQuery(['game', id], () => getGame(id));
 
   return (
     <div className='row mt-3'>

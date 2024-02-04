@@ -50,7 +50,6 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
-        [Authorize]
         [HttpPost("createGame")]
         public async Task<IActionResult> CreateGame([FromForm] GameViewModel model)
         {
@@ -62,7 +61,6 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
-        [Authorize]
         [HttpPatch("editGame/{id}")]
         public async Task<IActionResult> EditGame(int id, [FromForm] GameViewModel model)
         {
@@ -74,5 +72,15 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
+        [HttpGet("findGamesByNameOrDev/{searchQuery}")]
+        public async Task<IActionResult> FindGamesByNameOrDev(string searchQuery)
+        {
+            var response = await _gameService.SearchGames(searchQuery);
+            if (response.StatusCode == Domain.Enum.StatusCode.OK)
+            {
+                return Ok(response.Data);
+            }
+            return BadRequest("Game not found");
+        }
     }
 }

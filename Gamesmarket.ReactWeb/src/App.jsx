@@ -9,6 +9,7 @@ import GamesPage from './pages/games/GamesPage';
 import CreateGame from './pages/games/CreateGamePage';
 import HomePage from './pages/HomePage';
 import GameDetailsPage from './pages/games/GameDetailsPage';
+import SearchResultsPage from './pages/games/SearchResultsPage';
 
 const queryClient = new QueryClient()
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path="games" element={<GamesPage/>}/>
             <Route path="creategame" element={<CreateGame/>}/>
             <Route path="game/:id" element={<GameDetailsPage />} />
+            <Route path="search-results" element={<SearchResultsPage />} />
           </Route>
         </Routes>
     </QueryClientProvider>

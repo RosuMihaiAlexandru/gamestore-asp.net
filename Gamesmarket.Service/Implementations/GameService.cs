@@ -153,27 +153,26 @@ namespace Gamesmarket.Service.Implementations
             }
         }
 
-        // Method for getting one game by name
-        public async Task<IBaseResponse<Game>> GetGameByName(string name)
+        // Method for getting games by its name or developer
+        public async Task<IBaseResponse<IEnumerable<Game>>> SearchGames(string searchQuery)
         {
-            var baseResponse = new BaseResponse<Game>();
+            var baseResponse = new BaseResponse<IEnumerable<Game>>();
             try
             {
-                var games = await _gameRepository.GetAll().Where(g => g.Name == name).ToListAsync();
-                var game = games.FirstOrDefault();
+                var games = await _gameRepository.GetAll().Where(g => g.Name == searchQuery || g.Developer == searchQuery).ToListAsync();
 
-                if (game == null)
+                if (games == null || !games.Any())
                 {
                     baseResponse.Description = "Game not found";
                     baseResponse.StatusCode = StatusCode.UserNotFound;
                     return baseResponse;
                 }
-                baseResponse.Data = game;
+                baseResponse.Data = games;
                 return baseResponse;
             }
             catch (Exception ex)
             {
-                return new BaseResponse<Game>
+                return new BaseResponse<IEnumerable<Game>>
                 {
                     Description = $"[GetGame] : {ex.Message}",
                     StatusCode = StatusCode.InternalServerError

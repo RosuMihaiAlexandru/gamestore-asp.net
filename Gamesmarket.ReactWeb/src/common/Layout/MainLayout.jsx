@@ -10,7 +10,7 @@ export const MainLayout = () => {
     <Outlet/>
     </main>
     
-    <footer className='container-fluid'>2023</footer>
+    <footer className='container-fluid'>2023-2024</footer>
     </>
   )
 }

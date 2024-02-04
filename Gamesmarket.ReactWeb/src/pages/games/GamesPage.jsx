@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import { GetGames } from '../../common/services/api/games/GamesApi';
+import { getGames } from '../../common/services/api/game/GameApi';
 import GameList from './components/GamesList';
 import { useGameHandlers } from './Utils/CRUDhandlers';
 import ModalEdit from './components/UI/ModalEdit';
 
 function GamesPage() {
-  const {data, isLoading} = useQuery(["games"], GetGames);
+  const {data, isLoading} = useQuery(["games"], getGames);
   const { handleDelete, handleEdit, handleEditChange } = useGameHandlers();
   const [modal, setModal] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);

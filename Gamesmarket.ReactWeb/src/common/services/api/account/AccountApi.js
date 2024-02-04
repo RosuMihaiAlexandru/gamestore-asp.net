@@ -1,44 +1,44 @@
 import axios from 'axios';
 
-export async function Login(AuthRequest) {
+export async function login(AuthRequest) {
     try {
-      const response = await axios.post("https://localhost:7202/api/accounts/login", AuthRequest);
+      const response = await axios.post("https://localhost:7202/api/account/login", AuthRequest);
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;
     }
 }
-export async function Register(RegisterRequest) {
+export async function register(RegisterRequest) {
     try {
-      const response = await axios.post("https://localhost:7202/api/accounts/register", RegisterRequest);
+      const response = await axios.post("https://localhost:7202/api/account/register", RegisterRequest);
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;
     }
 }
-export async function RefreshToken(TokenModel) {
+export async function refreshToken(TokenModel) {
     try {
-      const response = await axios.post("https://localhost:7202/api/accounts/refresh-token", TokenModel);
+      const response = await axios.post("https://localhost:7202/api/account/refresh-token", TokenModel);
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;
     }
 }
-export async function Revoke(username) {
+export async function revoke(username) {
     try {
-      const response = await axios.post("https://localhost:7202/api/accounts/revoke", username);
+      const response = await axios.post("https://localhost:7202/api/account/revoke", username);
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;
     }
 }
-export async function RevokeAll() {
+export async function revokeAll() {
     try {
-      const response = await axios.post("https://localhost:7202/api/accounts/revoke-all");
+      const response = await axios.post("https://localhost:7202/api/account/revoke-all");
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);

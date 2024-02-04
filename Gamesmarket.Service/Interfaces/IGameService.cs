@@ -15,7 +15,7 @@ namespace Gamesmarket.Service.Interfaces
 
         Task<IBaseResponse<bool>> DeleteGame(int id);
 
-        Task<IBaseResponse<Game>> GetGameByName(string name);
+        Task<IBaseResponse<IEnumerable<Game>>> SearchGames(string searchQuery);
 
 		Task<IBaseResponse<Game>> Edit(int id, GameViewModel model);
 

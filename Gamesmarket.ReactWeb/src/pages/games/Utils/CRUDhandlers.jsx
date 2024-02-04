@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { CreateGame, DeleteGame, EditGame} from '../../../common/services/api/games/GamesApi';
+import { createGame, deleteGame, editGame} from '../../../common/services/api/game/GameApi';
 
 export const useGameHandlers = () => {
   const [gameData, setGameData] = useState({//Allows to track the status of form data
@@ -41,7 +41,7 @@ export const useGameHandlers = () => {
       formData.append('gameGenre', gameData.gameGenre);
       formData.append('imageFile', gameData.image);
       
-      const response = await CreateGame(formData);
+      const response = await createGame(formData);
       console.log('Game created successfully:', response);
 
       toast.success('Game created successfully', {// Show successful notification
@@ -68,10 +68,7 @@ export const useGameHandlers = () => {
   const handleEditChange = (e, field) => {
     const { value } = e.target;
     console.log(`Setting ${field} to:`, value);
-    setGameData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
+    setGameData((prevData) => ({ ...prevData, [field]: value}));
   };
 
   const handleEdit = async (id) => {
@@ -93,7 +90,7 @@ export const useGameHandlers = () => {
   
       console.log('Form after:', formData);
 
-      const response = await EditGame(id, formData);
+      const response = await editGame(id, formData);
       console.log('Game updated successfully:', response);
   
       toast.success('Game edited successfully', {
@@ -119,7 +116,7 @@ export const useGameHandlers = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await DeleteGame(id);
+      const response = await deleteGame(id);
       console.log('Game deleted successfully:', response);
       
       toast.success('Game deleted successfully', {// Show successful notification

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import { GetGames } from '../common/services/api/games/GamesApi';
+import { getGames } from '../common/services/api/game/GameApi';
 
 const HomePage = () => {
-  const { data: games, isLoading: isLoadingGames } = useQuery(["games"], GetGames);
+  const { data: games, isLoading: isLoadingGames } = useQuery(["games"], getGames);
   const gamesToDisplay = games?.slice(0, 3) || [];
 
   return (
