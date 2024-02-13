@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
 const ModalSelect = ({ options, id, name, value, onChange }) => {
   return (
     <select
       id={id}
       name={name}
-      value={value[name]} 
+      value={value[name]}
       onChange={onChange}
       className="form-control"
     >

@@ -1,6 +1,6 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import GameList from './components/GamesList';
+import React from "react";
+import { useLocation } from "react-router-dom";
+import GameList from "./components/GamesList";
 
 const SearchResultsPage = () => {
   const location = useLocation();

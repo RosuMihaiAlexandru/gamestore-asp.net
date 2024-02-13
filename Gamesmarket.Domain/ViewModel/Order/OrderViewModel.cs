@@ -10,6 +10,8 @@
 
         public string GameGenre { get; set; }
 
+        public string GamePrice { get; set; }
+
         public string ImagePath { get; set; }
 
         public string Email { get; set; }

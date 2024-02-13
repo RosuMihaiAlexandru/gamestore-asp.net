@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
-import { getGames } from '../../common/services/api/game/GameApi';
-import GameList from './components/GamesList';
-import { useGameHandlers } from './Utils/CRUDhandlers';
-import ModalEdit from './components/UI/ModalEdit';
+import React, { useState } from "react";
+import { useQuery } from "react-query";
+import { getGames } from "../../common/services/api/game/GameApi";
+import GameList from "./components/GamesList";
+import { useGameHandlers } from "./Utils/CRUDhandlers";
+import ModalEdit from "./components/UI/ModalEdit";
 
 function GamesPage() {
-  const {data, isLoading} = useQuery(["games"], getGames);
+  const { data, isLoading } = useQuery(["games"], getGames);
   const { handleDelete, handleEdit, handleEditChange } = useGameHandlers();
   const [modal, setModal] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
@@ -18,21 +18,23 @@ function GamesPage() {
 
   return (
     <>
-      <div className='row mt-3'>
-        <div className='col'>
+      <div className="row mt-3">
+        <div className="col">
           <h1>Avaliable Games</h1>
         </div>
       </div>
-      <div className='row'>
-        <div className='col'>
-        {isLoading && <p>Data is loading...</p>}
-          {!isLoading && !data && (
-            <p>No games available.</p>
-          )}
+      <div className="row">
+        <div className="col">
+          {isLoading && <p>Data is loading...</p>}
+          {!isLoading && !data && <p>No games available.</p>}
           {!isLoading && data && data.length > 0 && (
             <div className="card rounded-4 shadow-sm">
               <div className="card-body">
-                <GameList games={data} onDelete={handleDelete} onEdit={openEditModal} />
+                <GameList
+                  games={data}
+                  onDelete={handleDelete}
+                  onEdit={openEditModal}
+                />
                 <ModalEdit
                   visible={modal}
                   setVisible={setModal}

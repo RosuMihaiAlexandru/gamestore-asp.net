@@ -29,7 +29,7 @@ namespace Gamesmarket.Service.Implementations
                     .Users
                     .Include(x => x.Cart)
                         .ThenInclude(x => x.Orders)
-                    .FirstOrDefaultAsync(x => x.Name == userName);
+                    .FirstOrDefaultAsync(x => x.UserName == userName);
 
                 if (user == null)
                 {
@@ -42,6 +42,15 @@ namespace Gamesmarket.Service.Implementations
                 // Retrieve orders related to the user's cart
                 var orders = user.Cart?.Orders;
 
+                if (orders == null || !orders.Any())
+                {
+                    return new BaseResponse<IEnumerable<OrderViewModel>>()
+                    {
+                        Description = "No orders found for the user.",
+                        StatusCode = StatusCode.OrderNotFound
+                    };
+                }
+                
                 // Map orders to view models
                 var response = from p in orders
                                join g in _gameRepository.GetAll() on p.GameId equals g.Id
@@ -51,6 +60,7 @@ namespace Gamesmarket.Service.Implementations
                                    GameName = g.Name,
                                    GameDeveloper = g.Developer,
                                    GameGenre = g.GameGenre.ToString(),
+                                   GamePrice = g.Price.ToString(),
                                    ImagePath = g.ImagePath
                                };
 
@@ -78,7 +88,7 @@ namespace Gamesmarket.Service.Implementations
                 var user = await _userManager.Users
                     .Include(x => x.Cart)
                         .ThenInclude(x => x.Orders)
-                    .FirstOrDefaultAsync(x => x.Name == userName);
+                    .FirstOrDefaultAsync(x => x.Email == userName);
 
                 if (user == null)
                 {
@@ -108,6 +118,7 @@ namespace Gamesmarket.Service.Implementations
                                     GameName = g.Name,
                                     GameDeveloper = g.Developer,
                                     GameGenre = g.GameGenre.ToString(),
+                                    GamePrice = g.Price.ToString(),
                                     ImagePath = g.ImagePath,
                                     Email = p.Email,
                                     Name = p.Name,

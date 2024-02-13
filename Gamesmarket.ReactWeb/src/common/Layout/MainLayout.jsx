@@ -1,16 +1,16 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import { MainNav } from './MainNav';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import { MainNav } from "./MainNav";
 
 export const MainLayout = () => {
   return (
     <>
-    <MainNav />
-    <main className='container'> 
-    <Outlet/>
-    </main>
-    
-    <footer className='container-fluid'>2023-2024</footer>
+      <MainNav />
+      <main className="container">
+        <Outlet />
+      </main>
+
+      <footer className="container-fluid">2023-2024</footer>
     </>
-  )
-}
+  );
+};

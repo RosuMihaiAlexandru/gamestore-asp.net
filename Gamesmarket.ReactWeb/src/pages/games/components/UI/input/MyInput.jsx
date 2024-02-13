@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const MyInput = ({ type, placeholder, name, value, onChange, min, max }) => {
   return (
@@ -6,7 +6,7 @@ const MyInput = ({ type, placeholder, name, value, onChange, min, max }) => {
       type={type}
       placeholder={placeholder}
       name={name}
-      value={value[name]} 
+      value={value[name]}
       onChange={onChange}
       min={min}
       max={max}

@@ -198,5 +198,36 @@ namespace Gamesmarket.Controllers
 
             return Ok();
         }
+
+        [Authorize("AdminPolicy")]
+        [HttpGet("getUsers")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+        {
+            // Retrieve all users from the database
+            var users = await _userManager.Users
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    RefreshTokenExpiryTime = u.RefreshTokenExpiryTime,
+                    UserName = u.UserName,
+                    Email = u.Email
+                })
+                .ToListAsync();
+
+            if (users == null || users.Count == 0)
+            {
+                return NotFound("No users found");
+            }
+
+            foreach (var user in users)
+            {
+                var appUser = await _userManager.FindByIdAsync(user.Id.ToString());
+                var roles = await _userManager.GetRolesAsync(appUser);
+                user.Role = roles.FirstOrDefault();
+            }
+
+            return Ok(users);
+        }
     }
 }
