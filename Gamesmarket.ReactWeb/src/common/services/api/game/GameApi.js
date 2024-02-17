@@ -13,9 +13,15 @@ export async function getGames() {
 }
 export async function createGame(gameData) {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       "https://localhost:7202/api/game/createGame",
       gameData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adding a token to the request header
+        },
+      },
     );
     return response.data;
   } catch (error) {
@@ -25,8 +31,14 @@ export async function createGame(gameData) {
 }
 export async function deleteGame(Id) {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.delete(
       `https://localhost:7202/api/game/delete/${Id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adding a token to the request header
+        },
+      },
     );
     return response.data;
   } catch (error) {
@@ -47,9 +59,15 @@ export async function getGame(Id) {
 }
 export async function editGame(Id, gameData) {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.patch(
       `https://localhost:7202/api/game/editGame/${Id}`,
       gameData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adding a token to the request header
+        },
+      },
     );
     return response.data;
   } catch (error) {

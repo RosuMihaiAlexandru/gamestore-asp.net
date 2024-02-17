@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SearchHandler from "../../pages/games/Utils/Searchhandler";
+import { isAdminOrModerator } from "../../pages/accounts/Utils/AuthHandler";
+import AuthNav from "./AuthNav";
 
 export const MainNav = () => {
+  const isAllowedToCreateGame = isAdminOrModerator();
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-white bg-white shadow-sm">
@@ -32,19 +35,22 @@ export const MainNav = () => {
                   Games
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link active"
-                  aria-current="page"
-                  to="/creategame"
-                >
-                  CreateGame
-                </Link>
-              </li>
+              {isAllowedToCreateGame && (
+                <li className="nav-item">
+                  <Link
+                    className="nav-link active"
+                    aria-current="page"
+                    to="/creategame"
+                  >
+                    CreateGame
+                  </Link>
+                </li>
+              )}
             </ul>
-            <li className="d-flex">
+            <div className="d-flex align-items-center justify-content-center flex-grow-1">
               <SearchHandler />
-            </li>
+            </div>
+            <AuthNav />
           </div>
         </div>
       </nav>

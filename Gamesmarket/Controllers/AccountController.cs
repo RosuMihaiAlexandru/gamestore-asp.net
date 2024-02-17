@@ -67,13 +67,17 @@ namespace Gamesmarket.Controllers
             // Save changes to the db
             await _context.SaveChangesAsync();
 
+            // Get the role of the user for frontend
+            string userRole = roles.FirstOrDefault()?.Name ?? "No_Role";
+
             // Return the authentication response
             return Ok(new AuthResponse
             {
                 Username = user.UserName!,
                 Email = user.Email!,
                 Token = accessToken,
-                RefreshToken = user.RefreshToken
+                RefreshToken = user.RefreshToken,
+                Role = userRole
             });
         }
 
@@ -171,6 +175,7 @@ namespace Gamesmarket.Controllers
             });
         }
 
+        [Authorize("AdminPolicy")]
         [HttpPost]
         [Route("revoke/{username}")]
         public async Task<IActionResult> Revoke(string username)

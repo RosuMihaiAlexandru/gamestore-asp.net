@@ -4,12 +4,14 @@ import { getGames } from "../../common/services/api/game/GameApi";
 import GameList from "./components/GamesList";
 import { useGameHandlers } from "./Utils/CRUDhandlers";
 import ModalEdit from "./components/UI/ModalEdit";
+import { isAdminOrModerator } from "../../pages/accounts/Utils/AuthHandler";
 
 function GamesPage() {
   const { data, isLoading } = useQuery(["games"], getGames);
   const { handleDelete, handleEdit, handleEditChange } = useGameHandlers();
   const [modal, setModal] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
+  const isAllowedToEditAndDelete = isAdminOrModerator();
 
   const openEditModal = (game) => {
     setSelectedGame(game);
@@ -34,6 +36,7 @@ function GamesPage() {
                   games={data}
                   onDelete={handleDelete}
                   onEdit={openEditModal}
+                  isAllowedToEditAndDelete={isAllowedToEditAndDelete}
                 />
                 <ModalEdit
                   visible={modal}

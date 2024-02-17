@@ -6,11 +6,13 @@ export const MainLayout = () => {
   return (
     <>
       <MainNav />
-      <main className="container">
+      <main className="container" style={{ minHeight: "100vh" }}>
         <Outlet />
       </main>
 
-      <footer className="container-fluid">2023-2024</footer>
+      <footer className="container-fluid">
+        Designed by Samko Vitalii 2023-2024
+      </footer>
     </>
   );
 };

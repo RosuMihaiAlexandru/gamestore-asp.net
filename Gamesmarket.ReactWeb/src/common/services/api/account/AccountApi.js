@@ -1,29 +1,44 @@
 import axios from "axios";
 
-export async function login(AuthRequest) {
+export async function login(email, password) {
   try {
     const response = await axios.post(
       "https://localhost:7202/api/account/login",
-      AuthRequest,
+      { email, password },
     );
-    return response.data;
+    // Saving the data to local storage
+    const accessToken = response.data.token;
+    const userRole = response.data.role;
+    const userUsername = response.data.username;
+    localStorage.setItem("token", accessToken);
+    localStorage.setItem("role", userRole);
+    localStorage.setItem("username", userUsername);
+    return response.data; // Returning all user data
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
   }
 }
-export async function register(RegisterRequest) {
+export async function register(userData) {
   try {
     const response = await axios.post(
       "https://localhost:7202/api/account/register",
-      RegisterRequest,
+      userData,
     );
-    return response.data;
+    // Saving the data to local storage
+    const accessToken = response.data.token;
+    const userRole = response.data.role;
+    const userUsername = response.data.username;
+    localStorage.setItem("token", accessToken);
+    localStorage.setItem("role", userRole);
+    localStorage.setItem("username", userUsername);
+    return response.data; // Returning all user data
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
   }
 }
+
 export async function refreshToken(TokenModel) {
   try {
     const response = await axios.post(
@@ -61,8 +76,14 @@ export async function revokeAll() {
 }
 export async function getUsers() {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.get(
       "https://localhost:7202/api/account/getUsers",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adding a token to the request header
+        },
+      },
     );
     return response.data;
   } catch (error) {

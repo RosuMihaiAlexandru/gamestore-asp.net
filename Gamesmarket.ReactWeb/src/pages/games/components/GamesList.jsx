@@ -1,8 +1,11 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { isAdminOrModerator } from "../../../pages/accounts/Utils/AuthHandler";
 
 const GameList = ({ games, onDelete, onEdit }) => {
+  const isAllowedToEditAndDelete = isAdminOrModerator();
+
   if (!Array.isArray(games)) {
     console.error("Invalid data format for games:", games);
     return null;
@@ -33,18 +36,22 @@ const GameList = ({ games, onDelete, onEdit }) => {
               <p>GameGenre: {game.gameGenre}</p>
             </div>
             <div className="d-flex justify-content-start mt-3 mb-3 ms-3">
-              <button
-                className="btn btn-primary me-2"
-                onClick={() => onEdit(game)}
-              >
-                Edit
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => onDelete(game.id)}
-              >
-                Delete
-              </button>
+              {isAllowedToEditAndDelete && (
+                <>
+                  <button
+                    className="btn btn-primary me-2"
+                    onClick={() => onEdit(game)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => onDelete(game.id)}
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
               <ToastContainer />
             </div>
           </div>

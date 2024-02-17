@@ -38,7 +38,7 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
-        [Authorize]
+        [Authorize("StaffPolicy")]
         [HttpDelete("delete/{id}")]
 		public async Task<IActionResult> Delete (int id)
         {
@@ -50,6 +50,7 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
+        [Authorize("StaffPolicy")]
         [HttpPost("createGame")]
         public async Task<IActionResult> CreateGame([FromForm] GameViewModel model)
         {
@@ -61,6 +62,7 @@ namespace Gamesmarket.Controllers
             return BadRequest("Operation was not successful");
         }
 
+        [Authorize("StaffPolicy")]
         [HttpPatch("editGame/{id}")]
         public async Task<IActionResult> EditGame(int id, [FromForm] GameViewModel model)
         {

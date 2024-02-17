@@ -18,7 +18,7 @@ const SearchHandler = () => {
   };
 
   return (
-    <form className="d-flex" onSubmit={handleSearch}>
+    <form className="d-flex w-50" onSubmit={handleSearch}>
       <input
         className="form-control me-2"
         type="search"
