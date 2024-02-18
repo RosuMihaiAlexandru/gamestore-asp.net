@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getGame } from "../../common/services/api/game/GameApi";
+import { API_URL } from "../../common/services/http/config";
 
 const GameDetailsPage = () => {
   const { id } = useParams();
@@ -13,7 +14,7 @@ const GameDetailsPage = () => {
         {isLoading && <p>Loading game image...</p>}
         {!isLoading && game && (
           <img
-            src={`https://localhost:7202/${game.imagePath}`}
+            src={`${API_URL}${game.imagePath}`}
             className="card-img-top"
             alt={`Thumbnail for ${game.name}`}
           />

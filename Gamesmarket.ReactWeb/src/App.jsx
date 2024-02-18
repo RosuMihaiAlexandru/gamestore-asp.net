@@ -18,6 +18,7 @@ import GameDetailsPage from "./pages/games/GameDetailsPage";
 import SearchResultsPage from "./pages/games/SearchResultsPage";
 import LoginPage from "./pages/accounts/LoginPage";
 import RegistrationPage from "./pages/accounts/RegistrationPage";
+import CartPage from "./pages/carts/CartPage";
 
 const queryClient = new QueryClient();
 function App() {
@@ -41,6 +42,12 @@ function App() {
           <Route path="search-results" element={<SearchResultsPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegistrationPage />} />
+          <Route
+            path="cart"
+            element={
+              isAuthenticated() ? <CartPage /> : <Navigate to="/AccessDenied" />
+            }
+          />
           <Route path="AccessDenied" element={<AccessDeniedPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>

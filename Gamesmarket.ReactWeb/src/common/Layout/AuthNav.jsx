@@ -15,7 +15,23 @@ const AuthNav = () => {
   return isAuthenticated() ? (
     <div>
       <span style={{ marginRight: "10px" }}>{userName}</span>
-      <button onClick={handleLogout}>Logout</button>
+      <Link to="/cart" style={{ marginRight: "10px" }}>
+        <img
+          src="/cart.svg"
+          alt="Cart"
+          style={{ width: "30px", height: "30px" }}
+        />
+      </Link>
+      <Link to="/" onClick={handleLogout} style={{ color: "black" }}>
+        Logout
+      </Link>
+      <Link to="/" style={{ marginLeft: "10px" }} onClick={handleLogout}>
+        <img
+          src="/logout.svg"
+          alt="Logout"
+          style={{ width: "30px", height: "30px" }}
+        />
+      </Link>
     </div>
   ) : (
     <ul className="navbar-nav mb-2 mb-lg-0">

@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { getGames } from "../common/services/api/game/GameApi";
+import { API_URL } from "../common/services/http/config";
 
 const HomePage = () => {
   const { data: games, isLoading: isLoadingGames } = useQuery(
@@ -24,7 +25,7 @@ const HomePage = () => {
               <Link to={`/game/${game.id}`}>
                 <div className="card h-100 align-items-center">
                   <img
-                    src={`https://localhost:7202/${game.imagePath}`}
+                    src={`${API_URL}${game.imagePath}`}
                     alt={`Thumbnail for ${game.name}`}
                     className="card-img-top"
                     style={{ width: "75%", height: "75%" }}

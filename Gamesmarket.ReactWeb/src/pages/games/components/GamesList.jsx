@@ -2,6 +2,7 @@ import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { isAdminOrModerator } from "../../../pages/accounts/Utils/AuthHandler";
+import { API_URL } from "../../../common/services/http/config";
 
 const GameList = ({ games, onDelete, onEdit }) => {
   const isAllowedToEditAndDelete = isAdminOrModerator();
@@ -20,7 +21,7 @@ const GameList = ({ games, onDelete, onEdit }) => {
         <div key={game.id} className="col mb-4">
           <div className="card h-100">
             <img
-              src={`https://localhost:7202/${game.imagePath}`}
+              src={`${API_URL}${game.imagePath}`}
               className="card-img-top"
               alt={`Thumbnail for ${game.name}`}
               style={{ width: "50%", height: "50%" }}
