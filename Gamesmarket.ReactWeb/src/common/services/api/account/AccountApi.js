@@ -10,9 +10,12 @@ export async function login(email, password) {
     const accessToken = response.data.token;
     const userRole = response.data.role;
     const userUsername = response.data.username;
+    const userName = response.data.name;
+
     localStorage.setItem("token", accessToken);
     localStorage.setItem("role", userRole);
     localStorage.setItem("username", userUsername);
+    localStorage.setItem("name", userName);
     return response.data; // Returning all user data
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -29,9 +32,12 @@ export async function register(userData) {
     const accessToken = response.data.token;
     const userRole = response.data.role;
     const userUsername = response.data.username;
+    const userName = response.data.name;
+
     localStorage.setItem("token", accessToken);
     localStorage.setItem("role", userRole);
     localStorage.setItem("username", userUsername);
+    localStorage.setItem("name", userName);
     return response.data; // Returning all user data
   } catch (error) {
     console.error("Error fetching data:", error);

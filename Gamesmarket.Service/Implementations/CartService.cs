@@ -119,7 +119,6 @@ namespace Gamesmarket.Service.Implementations
                                     GameDeveloper = g.Developer,
                                     GameGenre = g.GameGenre.ToString(),
                                     GamePrice = g.Price.ToString(),
-                                    ImagePath = g.ImagePath,
                                     Email = p.Email,
                                     Name = p.Name,
                                     DateCreate = p.DateCreated.ToLongDateString(),

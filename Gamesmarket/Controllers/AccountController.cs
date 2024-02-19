@@ -75,6 +75,7 @@ namespace Gamesmarket.Controllers
             {
                 Username = user.UserName!,
                 Email = user.Email!,
+                Name = user.Name!,
                 Token = accessToken,
                 RefreshToken = user.RefreshToken,
                 Role = userRole

@@ -3,6 +3,7 @@ import { getDetail, getItem } from "../../../common/services/api/cart/CartApi";
 
 export const CartHandler = () => {
   const [cartData, setCartData] = useState([]);
+  const [orderDetails, setOrderDetails] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -18,5 +19,14 @@ export const CartHandler = () => {
     fetchCartDetail();
   }, []);
 
-  return { cartData, error };
+  const fetchOrderDetails = async (orderId) => {
+    try {
+      const data = await getItem(orderId);
+      setOrderDetails(data);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  return { cartData, orderDetails, error, fetchOrderDetails };
 };

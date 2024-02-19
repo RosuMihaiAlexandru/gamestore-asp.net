@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
+import { ToastContainer } from "react-toastify";
 import { getGames } from "../../common/services/api/game/GameApi";
+import OrderHandler from "../carts/Utils/OrderHandler";
 import GameList from "./components/GamesList";
 import { useGameHandlers } from "./Utils/CRUDhandlers";
 import ModalEdit from "./components/UI/ModalEdit";
@@ -12,6 +14,7 @@ function GamesPage() {
   const [modal, setModal] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const isAllowedToEditAndDelete = isAdminOrModerator();
+  const { onCreateOrder } = OrderHandler();
 
   const openEditModal = (game) => {
     setSelectedGame(game);
@@ -36,6 +39,7 @@ function GamesPage() {
                   games={data}
                   onDelete={handleDelete}
                   onEdit={openEditModal}
+                  onCreateOrder={onCreateOrder}
                   isAllowedToEditAndDelete={isAllowedToEditAndDelete}
                 />
                 <ModalEdit
@@ -50,6 +54,7 @@ function GamesPage() {
           )}
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { getGames } from "../common/services/api/game/GameApi";
-import { API_URL } from "../common/services/http/config";
+import { API_URL } from "../common/services/constants/config";
 
 const HomePage = () => {
   const { data: games, isLoading: isLoadingGames } = useQuery(

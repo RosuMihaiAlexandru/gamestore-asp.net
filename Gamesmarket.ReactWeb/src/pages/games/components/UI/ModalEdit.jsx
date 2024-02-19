@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MyModal from "./Mymodal";
+import MyModal from "../../../../common/Modal/MyModal";
 import MyInput from "./input/MyInput";
 import MyButton from "./button/MyButton";
 import ModalSelect from "./select/ModalSelect";

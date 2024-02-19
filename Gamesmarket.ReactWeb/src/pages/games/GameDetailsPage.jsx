@@ -2,11 +2,20 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getGame } from "../../common/services/api/game/GameApi";
-import { API_URL } from "../../common/services/http/config";
+import { API_URL } from "../../common/services/constants/config";
+import OrderHandler from "../carts/Utils/OrderHandler";
+import { ToastContainer } from "react-toastify";
 
 const GameDetailsPage = () => {
   const { id } = useParams();
   const { data: game, isLoading } = useQuery(["game", id], () => getGame(id));
+  const { handleCreateOrder } = OrderHandler();
+
+  const addToCart = () => {
+    if (game) {
+      handleCreateOrder(game.id);
+    }
+  };
 
   return (
     <div className="row mt-3">
@@ -39,10 +48,13 @@ const GameDetailsPage = () => {
         {!isLoading && game && (
           <div>
             <p>Price: {game.price}$</p>
-            <button class="btn btn-success">Add to card</button>
+            <button className="btn btn-success" onClick={addToCart}>
+              Add to cart
+            </button>
           </div>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };

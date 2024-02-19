@@ -1,12 +1,16 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { isAdminOrModerator } from "../../../pages/accounts/Utils/AuthHandler";
-import { API_URL } from "../../../common/services/http/config";
+import {
+  isAdminOrModerator,
+  isAuthenticated,
+} from "../../../pages/accounts/Utils/AuthHandler";
+import { API_URL } from "../../../common/services/constants/config";
+import OrderHandler from "../../carts/Utils/OrderHandler";
 
 const GameList = ({ games, onDelete, onEdit }) => {
   const isAllowedToEditAndDelete = isAdminOrModerator();
-
+  const { handleCreateOrder } = OrderHandler();
+  
   if (!Array.isArray(games)) {
     console.error("Invalid data format for games:", games);
     return null;
@@ -36,7 +40,7 @@ const GameList = ({ games, onDelete, onEdit }) => {
               </p>
               <p>GameGenre: {game.gameGenre}</p>
             </div>
-            <div className="d-flex justify-content-start mt-3 mb-3 ms-3">
+            <div className="d-flex justify-content-between mt-3 mb-3 ms-3">
               {isAllowedToEditAndDelete && (
                 <>
                   <button
@@ -50,6 +54,16 @@ const GameList = ({ games, onDelete, onEdit }) => {
                     onClick={() => onDelete(game.id)}
                   >
                     Delete
+                  </button>
+                </>
+              )}
+              {isAuthenticated() && (
+                <>
+                  <button
+                    className="btn btn-success"
+                    onClick={() => handleCreateOrder(game.id)}
+                  >
+                    Add to card
                   </button>
                 </>
               )}

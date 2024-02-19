@@ -21,7 +21,7 @@ export async function getItem(Id) {
   try {
     const token = localStorage.getItem("token");
     const response = await axios.get(
-      `https://localhost:7202/api/cart/getItem/${Id}`,
+      `https://localhost:7202/api/cart/getItem?id=${Id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`, // Adding a token to the request header

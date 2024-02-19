@@ -1,11 +1,25 @@
 import React from "react";
-import { API_URL } from "../../../common/services/http/config";
+import { API_URL } from "../../../common/services/constants/config";
+import OrderHandler from "../Utils/OrderHandler";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const OrdersList = ({ orders }) => {
+const OrdersList = ({ orders, onOrderClick }) => {
+  const { handleDelete, error } = OrderHandler();
+
+  const onDelete = async (orderId) => {
+    try {
+      await handleDelete(orderId);
+      toast.success("Order deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting order:", error);
+      toast.error("Failed to delete order.");
+    }
+  };
+
   if (orders.length === 0) {
     return <p>Cart is empty :(</p>;
   }
-
   const totalPrice = orders.reduce((total, order) => {
     // Replace the comma with a dot because the price format is incorrect
     const price = order.gamePrice.replace(",", ".");
@@ -36,6 +50,19 @@ const OrdersList = ({ orders }) => {
               <div className="col-md-3 d-flex justify-content-center align-items-center">
                 <div className="card-body">
                   <h5 className="card-title ">${order.gamePrice}</h5>
+                  <button
+                    className="btn btn-primary mb-2"
+                    onClick={() => onOrderClick(order.id)}
+                  >
+                    View Details
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => onDelete(order.id)}
+                  >
+                    Delete
+                  </button>
+                  {error && <p>Error deleting order: {error}</p>}
                 </div>
               </div>
             </div>
@@ -55,6 +82,7 @@ const OrdersList = ({ orders }) => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
