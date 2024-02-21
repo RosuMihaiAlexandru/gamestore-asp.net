@@ -37,6 +37,9 @@ export const useGameHandlers = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+      console.log("gameData before Form:", gameData);
+      console.log("Image before Form:", gameData.image);
+
       const formData = new FormData();
       formData.append("name", gameData.name);
       formData.append("developer", gameData.developer);
@@ -45,6 +48,8 @@ export const useGameHandlers = () => {
       formData.append("releaseDate", gameData.releaseDate);
       formData.append("gameGenre", gameData.gameGenre);
       formData.append("imageFile", gameData.image);
+
+      console.log("Form after:", formData);
 
       const response = await createGame(formData);
       console.log("Game created successfully:", response);
@@ -79,13 +84,11 @@ export const useGameHandlers = () => {
   };
 
   const handleEdit = async (id) => {
+    // Need to be fixed image loss in form
     try {
       console.log("gameData before Form:", gameData);
       console.log("Image before Form:", gameData.image);
-      if (!gameData.image) {
-        console.error("Image is null");
-        return;
-      }
+
       const formData = new FormData();
       formData.append("name", gameData.name);
       formData.append("developer", gameData.developer);
@@ -96,7 +99,6 @@ export const useGameHandlers = () => {
       formData.append("imageFile", gameData.image);
 
       console.log("Form after:", formData);
-
       const response = await editGame(id, formData);
       console.log("Game updated successfully:", response);
 

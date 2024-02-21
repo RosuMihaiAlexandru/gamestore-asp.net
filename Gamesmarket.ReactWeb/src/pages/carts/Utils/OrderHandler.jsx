@@ -7,7 +7,7 @@ import {
 
 const OrderHandler = () => {
   const [error, setError] = useState(null);
-  
+
   const handleDelete = async (id) => {
     try {
       const response = await deleteOrder(id);

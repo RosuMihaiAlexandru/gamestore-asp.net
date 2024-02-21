@@ -8,6 +8,7 @@ import { MainLayout } from "./common/Layout/MainLayout";
 import {
   isAuthenticated,
   isAdminOrModerator,
+  isAdmin,
 } from "./pages/accounts/Utils/AuthHandler";
 import GamesPage from "./pages/games/GamesPage";
 import CreateGame from "./pages/games/CreateGamePage";
@@ -19,6 +20,7 @@ import SearchResultsPage from "./pages/games/SearchResultsPage";
 import LoginPage from "./pages/accounts/LoginPage";
 import RegistrationPage from "./pages/accounts/RegistrationPage";
 import CartPage from "./pages/carts/CartPage";
+import UsersPage from "./pages/admin/UsersPage";
 
 const queryClient = new QueryClient();
 function App() {
@@ -40,12 +42,36 @@ function App() {
           />
           <Route path="game/:id" element={<GameDetailsPage />} />
           <Route path="search-results" element={<SearchResultsPage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegistrationPage />} />
+          <Route
+            path="login"
+            element={
+              !isAuthenticated() ? <LoginPage /> : <Navigate to="/cart" />
+            }
+          />
+          <Route
+            path="register"
+            element={
+              !isAuthenticated() ? (
+                <RegistrationPage />
+              ) : (
+                <Navigate to="/cart" />
+              )
+            }
+          />
           <Route
             path="cart"
             element={
               isAuthenticated() ? <CartPage /> : <Navigate to="/AccessDenied" />
+            }
+          />
+          <Route
+            path="usersPage"
+            element={
+              isAdmin() && isAuthenticated() ? (
+                <UsersPage />
+              ) : (
+                <Navigate to="/AccessDenied" />
+              )
             }
           />
           <Route path="AccessDenied" element={<AccessDeniedPage />} />

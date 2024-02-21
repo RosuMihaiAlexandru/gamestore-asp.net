@@ -87,6 +87,13 @@ namespace Gamesmarket.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(request);
 
+            // Ensure the email domain is allowed
+            var allowedDomains = new[] { "@gmail.com", "@ukr.net", "@yahoo.com" };
+            if (!allowedDomains.Any(domain => request.Email.EndsWith(domain, StringComparison.OrdinalIgnoreCase)))
+            {
+                return BadRequest("Invalid email domain. Allowed domains are @gmail.com, @ukr.net, @yahoo.com.");
+            }
+
             // Create a new user based on the registration request
             var user = new User
             {
@@ -216,7 +223,6 @@ namespace Gamesmarket.Controllers
                     Id = u.Id,
                     Name = u.Name,
                     RefreshTokenExpiryTime = u.RefreshTokenExpiryTime,
-                    UserName = u.UserName,
                     Email = u.Email
                 })
                 .ToListAsync();
@@ -235,5 +241,43 @@ namespace Gamesmarket.Controllers
 
             return Ok(users);
         }
+
+        [Authorize("AdminPolicy")]
+        [HttpPost]
+        [Route("change-role")]
+        public async Task<IActionResult> ChangeUserRole(ChangeRoleRequest request)
+        {
+            // Ensure the requested role exists
+            var role = await _context.Roles.FirstOrDefaultAsync(r => r.NormalizedName == request.NewRole.ToUpper());
+            if (role == null) return BadRequest("Requested role does not exist.");
+
+            // Find the user by email
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null) return BadRequest("User not found");
+
+            // Prevent changing the role of the admin user
+            if (user.Email.Equals("admin@gmail.com", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest("Cannot change the role of the admin user.");
+            }
+
+            // Remove the user current role
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            var result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Failed to remove current roles.");
+            }
+
+            // Assign the user to the new role
+            result = await _userManager.AddToRoleAsync(user, role.Name);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Failed to assign the new role.");
+            }
+
+            return Ok($"Role of user '{user.Email}' changed to '{request.NewRole}'.");
+        }
+
     }
 }

@@ -44,7 +44,6 @@ export async function register(userData) {
     throw error;
   }
 }
-
 export async function refreshToken(TokenModel) {
   try {
     const response = await axios.post(
@@ -59,9 +58,15 @@ export async function refreshToken(TokenModel) {
 }
 export async function revoke(username) {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       "https://localhost:7202/api/account/revoke",
       username,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adding a token to the request header
+        },
+      },
     );
     return response.data;
   } catch (error) {
@@ -71,8 +76,15 @@ export async function revoke(username) {
 }
 export async function revokeAll() {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       "https://localhost:7202/api/account/revoke-all",
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adding a token to the request header
+        },
+      },
     );
     return response.data;
   } catch (error) {
@@ -85,6 +97,24 @@ export async function getUsers() {
     const token = localStorage.getItem("token");
     const response = await axios.get(
       "https://localhost:7202/api/account/getUsers",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adding a token to the request header
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+}
+export async function changeRole(email, newRole) {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.post(
+      "https://localhost:7202/api/account/change-role",
+      { email, newRole },
       {
         headers: {
           Authorization: `Bearer ${token}`, // Adding a token to the request header

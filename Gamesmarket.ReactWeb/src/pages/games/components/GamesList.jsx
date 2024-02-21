@@ -1,5 +1,6 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
+import { Link } from "react-router-dom";
 import {
   isAdminOrModerator,
   isAuthenticated,
@@ -8,9 +9,10 @@ import { API_URL } from "../../../common/services/constants/config";
 import OrderHandler from "../../carts/Utils/OrderHandler";
 
 const GameList = ({ games, onDelete, onEdit }) => {
-  const isAllowedToEditAndDelete = isAdminOrModerator();
+  const AllowedToEditAndDelete = isAdminOrModerator();
+  const Authenticated = isAuthenticated();
   const { handleCreateOrder } = OrderHandler();
-  
+
   if (!Array.isArray(games)) {
     console.error("Invalid data format for games:", games);
     return null;
@@ -41,7 +43,7 @@ const GameList = ({ games, onDelete, onEdit }) => {
               <p>GameGenre: {game.gameGenre}</p>
             </div>
             <div className="d-flex justify-content-between mt-3 mb-3 ms-3">
-              {isAllowedToEditAndDelete && (
+              {AllowedToEditAndDelete && (
                 <>
                   <button
                     className="btn btn-primary me-2"
@@ -57,7 +59,10 @@ const GameList = ({ games, onDelete, onEdit }) => {
                   </button>
                 </>
               )}
-              {isAuthenticated() && (
+              <Link to={`/game/${game.id}`} className="btn btn-primary">
+                View
+              </Link>
+              {Authenticated && (
                 <>
                   <button
                     className="btn btn-success"
