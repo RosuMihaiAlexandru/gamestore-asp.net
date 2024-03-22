@@ -1,4 +1,6 @@
-﻿using Gamesmarket.Domain.ViewModel.Game;
+﻿using Gamesmarket.Domain.Entity;
+using Gamesmarket.Domain.Response;
+using Gamesmarket.Domain.ViewModel.Game;
 using Gamesmarket.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +26,12 @@ namespace Gamesmarket.Controllers
 			{
                 return Ok(response.Data.ToList()); //Return the list of games
 			}
-            return BadRequest("Operation was not successful");  //Redirect to error page if operation was not successful
+            else
+            {
+                // Cast to BaseResponse<IEnumerable<Game>> to access Description
+                var concreteResponse = (BaseResponse<IEnumerable<Game>>)response;
+                return BadRequest(concreteResponse.Description);
+            }
         }
 
         [HttpGet("getGame/{id}")]
@@ -35,7 +42,12 @@ namespace Gamesmarket.Controllers
             {
                 return Ok(response.Data);
             }
-            return BadRequest("Operation was not successful");
+            else
+            {
+                // Cast to BaseResponse<Game> for specific error handling
+                var concreteResponse = (BaseResponse<Game>)response;
+                return BadRequest(concreteResponse.Description);
+            }
         }
 
         [Authorize("StaffPolicy")]
@@ -47,7 +59,12 @@ namespace Gamesmarket.Controllers
 			{
                 return Ok(new { description = "Game deleted successfully." });
             }
-            return BadRequest("Operation was not successful");
+            else
+            {
+                // Cast to BaseResponse<bool> for specific error handling
+                var concreteResponse = (BaseResponse<bool>)response;
+                return BadRequest(concreteResponse.Description);
+            }
         }
 
         [Authorize("StaffPolicy")]
@@ -59,7 +76,12 @@ namespace Gamesmarket.Controllers
             {
                 return Ok(new { data = response.Data, description = "Game created successfully." });
             }
-            return BadRequest("Operation was not successful");
+            else
+            {
+                // Access the Description property of the BaseResponse<GameViewModel>
+                var concreteResponse = (BaseResponse<GameViewModel>)response;
+                return BadRequest(concreteResponse.Description);
+            }
         }
 
         [Authorize("StaffPolicy")]
@@ -71,7 +93,12 @@ namespace Gamesmarket.Controllers
             {
                 return Ok(new { data = response.Data, description = "Game edited successfully." });
             }
-            return BadRequest("Operation was not successful");
+            else
+            {
+                // Cast to BaseResponse<Game> for specific error handling
+                var concreteResponse = (BaseResponse<Game>)response;
+                return BadRequest(concreteResponse.Description);
+            }
         }
 
         [HttpGet("findGamesByNameOrDev/{searchQuery}")]
@@ -82,7 +109,11 @@ namespace Gamesmarket.Controllers
             {
                 return Ok(response.Data);
             }
-            return BadRequest("Game not found");
-        }
+            else
+            {
+                // Cast to BaseResponse<IEnumerable<Game>> to access Description
+                var concreteResponse = (BaseResponse<IEnumerable<Game>>)response;
+                return BadRequest(concreteResponse.Description);
+            }        }
     }
 }

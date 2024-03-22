@@ -1,4 +1,6 @@
-﻿using Gamesmarket.Service.Interfaces;
+﻿using Gamesmarket.Domain.Enum;
+using Gamesmarket.Domain.Response;
+using Gamesmarket.Service.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
@@ -13,25 +15,33 @@ namespace Gamesmarket.Service.Implementations
             _hostingEnvironment = hostingEnvironment;
         }
 
-        public async Task<string> SaveImageAsync(IFormFile imageFile, string subfolder)
+        public async Task<IBaseResponse<string>> SaveImageAsync(IFormFile imageFile, string subfolder)
         {
+            var baseResponse = new BaseResponse<string>();
+
             if (imageFile == null || imageFile.Length <= 0)
             {
-                throw new InvalidOperationException("Invalid image file.");
+                baseResponse.Description = "Invalid image file.";
+                baseResponse.StatusCode = StatusCode.InvalidData;
+                return baseResponse;
             }
 
             // Validate image format
             var allowedFormats = new[] { "image/jpeg", "image/png", "image/webp" };
             if (!allowedFormats.Contains(imageFile.ContentType.ToLower()))
             {
-                throw new InvalidOperationException("Invalid image format. Supported formats: JPEG, PNG, WebP.");
+                baseResponse.Description = "Invalid image format. Supported formats: JPEG, PNG, WebP.";
+                baseResponse.StatusCode = StatusCode.InvalidData;
+                return baseResponse;
             }
 
             // Validate image size
             var maxFileSizeInBytes = 2 * 1024 * 1024; // 2 MB
             if (imageFile.Length > maxFileSizeInBytes)
             {
-                throw new InvalidOperationException("Image size exceeds the maximum allowed size (2 MB).");
+                baseResponse.Description = "Image size exceeds the maximum allowed size (2 MB).";
+                baseResponse.StatusCode = StatusCode.InvalidData;
+                return baseResponse;
             }
 
             // Create a unique file name to avoid overwriting existing files
@@ -57,7 +67,9 @@ namespace Gamesmarket.Service.Implementations
             var relativePath = Path.Combine("images", subfolder, fileName);
 
             // Normalize the path to replace backslashes with forward slashes
-            return relativePath.Replace('\\', '/');
+            baseResponse.Data = relativePath.Replace('\\', '/');
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
     }
 }

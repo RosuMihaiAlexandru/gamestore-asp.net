@@ -58,7 +58,14 @@ namespace Gamesmarket.Service.Implementations
             var baseResponse = new BaseResponse<GameViewModel>();
             try
             {
-                var imagePath = await SaveGameImage(gameViewModel.ImageFile);
+                var imageResponse = await SaveGameImage(gameViewModel.ImageFile);
+                if (imageResponse.StatusCode != StatusCode.OK)
+                {
+                    var concreteResponse = (BaseResponse<string>)imageResponse; // Clarification that we take Description from BaseResponse
+                    baseResponse.Description = concreteResponse.Description;
+                    baseResponse.StatusCode = imageResponse.StatusCode;
+                    return baseResponse;
+                }
 
                 var game = new Game()
                 {//Create a new Game object based on the GameViewModel
@@ -68,7 +75,7 @@ namespace Gamesmarket.Service.Implementations
                     Price = gameViewModel.Price,
                     Name = gameViewModel.Name,
                     GameGenre = (GameGenre)Convert.ToInt32(gameViewModel.GameGenre),
-                    ImagePath = imagePath,
+                    ImagePath = imageResponse.Data,
                 };
                 await _gameRepository.Create(game); //Call repository method to create the game
 
@@ -91,7 +98,7 @@ namespace Gamesmarket.Service.Implementations
                 baseResponse.StatusCode = StatusCode.InvalidData;
                 return baseResponse;
             }
-            catch (Exception ex)
+            catch (Exception ex) // A general catch-all for any other exceptions
             {
                 baseResponse.Description = $"[CreateGame] : {ex.Message}";
                 baseResponse.StatusCode = StatusCode.InternalServerError;
@@ -252,8 +259,17 @@ namespace Gamesmarket.Service.Implementations
                 {
                     try
                     {
-                        string imagePath = await SaveGameImage(model.ImageFile);
-                        game.ImagePath = imagePath;
+                        var imageResponse = await SaveGameImage(model.ImageFile);
+                        if (imageResponse.StatusCode == StatusCode.OK)
+                        {
+                            game.ImagePath = imageResponse.Data; // Extract the string path from the response
+                        }
+                        else
+                        {
+                            baseResponse.Description = "Game not found";
+                            baseResponse.StatusCode = imageResponse.StatusCode;
+                            return baseResponse;
+                        }
                     }
                     catch (InvalidOperationException ex) // Exception due to invalid image format or size
                     {
@@ -261,6 +277,7 @@ namespace Gamesmarket.Service.Implementations
                         baseResponse.StatusCode = StatusCode.InvalidData;
                         return baseResponse;
                     }
+
                 }
                 // Call the repository method to update the game in db
                 await _gameRepository.Update(game);
@@ -279,7 +296,7 @@ namespace Gamesmarket.Service.Implementations
 		}
 
         // Method for image saving 
-        public async Task<string> SaveGameImage(IFormFile imageFile)
+        public async Task<IBaseResponse<string>> SaveGameImage(IFormFile imageFile)
         {
             // Save the image and return the path
             return await _imageService.SaveImageAsync(imageFile, "game");

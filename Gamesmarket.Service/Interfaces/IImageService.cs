@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Gamesmarket.Domain.Response;
+using Microsoft.AspNetCore.Http;
 
 namespace Gamesmarket.Service.Interfaces
 {
     public interface IImageService
     {
-        Task<string> SaveImageAsync(IFormFile imageFile, string subfolder);
+        Task<IBaseResponse<string>> SaveImageAsync(IFormFile imageFile, string subfolder);
     }
 }

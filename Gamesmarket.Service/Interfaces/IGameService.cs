@@ -19,6 +19,6 @@ namespace Gamesmarket.Service.Interfaces
 
 		Task<IBaseResponse<Game>> Edit(int id, GameViewModel model);
 
-        Task<string> SaveGameImage(IFormFile imageFile);
+        Task<IBaseResponse<string>> SaveGameImage(IFormFile imageFile);
     }
 }
