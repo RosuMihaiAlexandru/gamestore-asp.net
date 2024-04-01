@@ -1,4 +1,6 @@
-﻿using Gamesmarket.Service.Interfaces;
+﻿using Gamesmarket.Domain.Response;
+using Gamesmarket.Domain.ViewModel.Order;
+using Gamesmarket.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +26,12 @@ namespace Gamesmarket.Controllers
             {
                 return Ok(response.Data.ToList());
             }
-            return BadRequest("Operation was not successful");
+            else
+            {
+                // Cast to BaseResponse<IEnumerable<OrderViewModel>> for specific error handling
+                var concreteResponse = (BaseResponse<IEnumerable<OrderViewModel>>)response;
+                return BadRequest(concreteResponse.Description);
+            }
         }
 
         [Authorize]
@@ -36,7 +43,12 @@ namespace Gamesmarket.Controllers
             {
                 return Ok(response.Data);
             }
-            return BadRequest("Operation was not successful");
+            else
+            {
+                // Cast to BaseResponse<OrderViewModel> for specific error handling
+                var concreteResponse = (BaseResponse<OrderViewModel>)response;
+                return BadRequest(concreteResponse.Description);
+            }
         }
     }
 }

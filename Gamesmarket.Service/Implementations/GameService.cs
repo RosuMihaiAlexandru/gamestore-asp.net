@@ -34,7 +34,7 @@ namespace Gamesmarket.Service.Implementations
 				if (game == null)//If the game is not found, set appropriate status and description
 				{
 					baseResponse.Description = "Game not found";
-                    baseResponse.StatusCode = StatusCode.UserNotFound;
+                    baseResponse.StatusCode = StatusCode.GameNotFound;
                     return baseResponse;
                 }
 				//If the game is found, assign it to the response data
@@ -171,7 +171,7 @@ namespace Gamesmarket.Service.Implementations
                 if (games == null || !games.Any())
                 {
                     baseResponse.Description = "Game not found";
-                    baseResponse.StatusCode = StatusCode.UserNotFound;
+                    baseResponse.StatusCode = StatusCode.GameNotFound;
                     return baseResponse;
                 }
                 baseResponse.Data = games;
@@ -197,7 +197,7 @@ namespace Gamesmarket.Service.Implementations
 				if (games.Count == 0)
                 {
                     baseResponse.Description = "Found 0 elements";
-                    baseResponse.StatusCode = StatusCode.OK;
+                    baseResponse.StatusCode = StatusCode.GameNotFound;
 
                     return baseResponse;
                 }

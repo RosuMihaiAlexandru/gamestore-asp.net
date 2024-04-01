@@ -1,4 +1,6 @@
-﻿using Gamesmarket.Domain.ViewModel.Order;
+﻿using Gamesmarket.Domain.Entity;
+using Gamesmarket.Domain.Response;
+using Gamesmarket.Domain.ViewModel.Order;
 using Gamesmarket.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +27,12 @@ namespace Gamesmarket.Controllers
              {
                  return Ok(new { data = response.Data, description = "Order added successfully." });
              }
-             return StatusCode(StatusCodes.Status500InternalServerError);
+            else
+            {
+                // Cast to BaseResponse<Order> for specific error handling
+                var concreteResponse = (BaseResponse<Order>)response;
+                return BadRequest(concreteResponse.Description);
+            }
         }
 
         [Authorize]
@@ -37,7 +44,12 @@ namespace Gamesmarket.Controllers
             {
                 return Ok(new { description = "Order deleted successfully." });
             }
-            return BadRequest("Failed to delete order");
+            else
+            {
+                // Cast to BaseResponse<bool> for specific error handling
+                var concreteResponse = (BaseResponse<bool>)response;
+                return BadRequest(concreteResponse.Description);
+            }
         }
     }
 }

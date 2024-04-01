@@ -114,6 +114,7 @@ namespace Gamesmarket.Controllers
                 // Cast to BaseResponse<IEnumerable<Game>> to access Description
                 var concreteResponse = (BaseResponse<IEnumerable<Game>>)response;
                 return BadRequest(concreteResponse.Description);
-            }        }
+            }        
+        }
     }
 }
