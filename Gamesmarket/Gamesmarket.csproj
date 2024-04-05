@@ -26,5 +26,8 @@
     <ProjectReference Include="..\Gamesmarket.Domain\Gamesmarket.Domain.csproj" />
     <ProjectReference Include="..\Gamesmarket.Service\Gamesmarket.Service.csproj" />
   </ItemGroup>
-  
+  <ItemGroup>
+    <InternalsVisibleTo Include="Gamesmarket.IntegrationTests" />
+  </ItemGroup>
+
 </Project>
