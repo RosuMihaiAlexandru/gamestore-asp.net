@@ -1,18 +1,22 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getGame } from "../../common/services/api/game/GameApi";
 import { API_URL } from "../../common/services/constants/config";
 import OrderHandler from "../carts/Utils/OrderHandler";
 import { ToastContainer } from "react-toastify";
+import { isAuthenticated } from "../../pages/accounts/Utils/AuthHandler";
 
 const GameDetailsPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data: game, isLoading } = useQuery(["game", id], () => getGame(id));
   const { handleCreateOrder } = OrderHandler();
 
   const addToCart = () => {
-    if (game) {
+    if (!isAuthenticated()) {
+      navigate("/login");
+    } else if (game) {
       handleCreateOrder(game.id);
     }
   };

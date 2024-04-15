@@ -94,7 +94,10 @@ const ModalEdit = ({
             <span>Image:</span>
             <MyCreateInput
               type="file"
-              onChange={(e) => handleImageChange(e, setPreviewImage)}
+              onChange={(e) => {
+                handleImageChange(e, setPreviewImage);
+                handleEditChange(e, "image");
+              }}
             />
           </div>
           {previewImage && (
