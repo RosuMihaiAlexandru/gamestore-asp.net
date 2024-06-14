@@ -1,7 +1,7 @@
 ﻿using Gamesmarket.Domain.Response;
 using Microsoft.AspNetCore.Http;
 
-namespace Gamesmarket.Service.Interfaces
+namespace Gamesmarket.Interfaces.Services
 {
     public interface IImageService
     {

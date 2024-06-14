@@ -2,8 +2,9 @@
 using Gamesmarket.Domain.Enum;
 using Gamesmarket.Domain.Response;
 using Gamesmarket.Domain.ViewModel.Game;
-using Gamesmarket.Service.Interfaces;
-using GamesMarket.DAL.Interfaces;
+using Gamesmarket.Interfaces.Services;
+using Gamesmarket.DAL.Interfaces;
+using Gamesmarket.Utilities.Games;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -30,14 +31,13 @@ namespace Gamesmarket.Service.Implementations
             var baseResponse = new BaseResponse<Game>();//New object for operations with Game type objects.
 			try
             {
-                var game = await _gameRepository.Get(id);//Getting a game by ID
-				if (game == null)//If the game is not found, set appropriate status and description
+                var game = await _gameRepository.Get(id);
+				if (game == null)
 				{
 					baseResponse.Description = "Game not found";
                     baseResponse.StatusCode = StatusCode.GameNotFound;
                     return baseResponse;
                 }
-				//If the game is found, assign it to the response data
 				baseResponse.Data = game;
                 return baseResponse;
             }
@@ -67,38 +67,14 @@ namespace Gamesmarket.Service.Implementations
                     return baseResponse;
                 }
 
-                var game = new Game()
-                {//Create a new Game object based on the GameViewModel
-                    Description = gameViewModel.Description,
-                    ReleaseDate = gameViewModel.ReleaseDate,
-                    Developer = gameViewModel.Developer,
-                    Price = gameViewModel.Price,
-                    Name = gameViewModel.Name,
-                    GameGenre = (GameGenre)Convert.ToInt32(gameViewModel.GameGenre),
-                    ImagePath = imageResponse.Data,
-                };
+                var game = GameMappingUtilities.CreateGameFromViewModel(gameViewModel, imageResponse.Data); //Create a new Game object based on the GameViewModel
                 await _gameRepository.Create(game); //Call repository method to create the game
 
                 // Show data of created game after game created
-                var gameViewModelData = new GameViewModel
-                {
-                    Id = game.Id,
-                    Description = game.Description,
-                    ReleaseDate = game.ReleaseDate,
-                    Developer = game.Developer,
-                    Price = game.Price,
-                    Name = game.Name,
-                    GameGenre = ((int)game.GameGenre).ToString(),
-                };
-                baseResponse.Data = gameViewModelData;
+                baseResponse.Data = GameMappingUtilities.CreateViewModelFromGame(game);
+                baseResponse.StatusCode = StatusCode.OK;
             }
-            catch (InvalidOperationException ex) // Exception due to invalid image format or size
-            {
-                baseResponse.Description = ex.Message;
-                baseResponse.StatusCode = StatusCode.InvalidData;
-                return baseResponse;
-            }
-            catch (Exception ex) // A general catch-all for any other exceptions
+            catch (Exception ex)
             {
                 baseResponse.Description = $"[CreateGame] : {ex.Message}";
                 baseResponse.StatusCode = StatusCode.InternalServerError;
@@ -109,10 +85,7 @@ namespace Gamesmarket.Service.Implementations
         // Method for deleting one game by id 
         public async Task<IBaseResponse<bool>> DeleteGame(int id)
         {
-            var baseResponse = new BaseResponse<bool>()
-            {
-                Data = true
-            };
+            var baseResponse = new BaseResponse<bool> { Data = true };
             try
             {
                 var game = await _gameRepository.Get(id);
@@ -121,33 +94,11 @@ namespace Gamesmarket.Service.Implementations
                     baseResponse.Description = "Game not found";
                     baseResponse.StatusCode = StatusCode.UserNotFound;
                     baseResponse.Data = false;
-
                     return baseResponse;
                 }
 
-                string relativeImagePath = game.ImagePath; // Get the image path
-
-                // Combine the relative path with the root path
-                string rootPath = Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot");
-                string fullPath = Path.Combine(rootPath, relativeImagePath);
-
-                // Delete image
-                if (!string.IsNullOrEmpty(relativeImagePath))
-                {
-                    Console.WriteLine("Deleting image file...");
-                    try
-                    {
-                        File.Delete(fullPath);
-                        Console.WriteLine("Image file deleted successfully.");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error deleting image file: {ex.Message}");
-                        throw; // Exception to prevent continuing db deletion
-                    }
-                }
-                await _gameRepository.Delete(game);// Call method to delete the game
-
+                FileUtilities.DeleteImageFile(game.ImagePath, _hostingEnvironment);
+                await _gameRepository.Delete(game);
                 return baseResponse;
             }
             catch (Exception ex)
@@ -167,7 +118,6 @@ namespace Gamesmarket.Service.Implementations
             try
             {
                 var games = await _gameRepository.GetAll().Where(g => g.Name == searchQuery || g.Developer == searchQuery).ToListAsync();
-
                 if (games == null || !games.Any())
                 {
                     baseResponse.Description = "Game not found";
@@ -193,18 +143,16 @@ namespace Gamesmarket.Service.Implementations
             var baseResponse = new BaseResponse<IEnumerable<Game>>();
             try
             {
-                var games = await _gameRepository.Select();//Get a list of games from repository
+                var games = await _gameRepository.Select();
 				if (games.Count == 0)
                 {
                     baseResponse.Description = "Found 0 elements";
                     baseResponse.StatusCode = StatusCode.GameNotFound;
-
                     return baseResponse;
                 }
 				//If games are found, assign the list to the response data
 				baseResponse.Data = games;
                 baseResponse.StatusCode = StatusCode.OK;
-
                 return baseResponse;
             }
             catch(Exception ex)
@@ -230,35 +178,12 @@ namespace Gamesmarket.Service.Implementations
 					baseResponse.Description = "Game not found";
 					return baseResponse;
                 }
-                // Delete the existing image file
-                if (!string.IsNullOrEmpty(game.ImagePath))
-                {
-                    try
-                    {
-                        Console.WriteLine("Deleting existing image file...");
-                        string existingImagePath = Path.Combine(_hostingEnvironment.WebRootPath, game.ImagePath);
-                        File.Delete(existingImagePath);
-                        Console.WriteLine("Existing image file deleted successfully.");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error deleting existing image file: {ex.Message}");
-                    }
-                }
 
-                //Updated game properties using data from GameViewModel
-                game.Description = model.Description;
-                game.Developer = model.Developer;
-                game.ReleaseDate = model.ReleaseDate;
-				game.Price = model.Price;
-                game.Name = model.Name; 
-                game.GameGenre = (GameGenre)Convert.ToInt32(model.GameGenre);
+                FileUtilities.DeleteImageFile(game.ImagePath, _hostingEnvironment);
+                GameMappingUtilities.UpdateGameFromViewModel(game, model);
 
-                // Handle image update
-                if (model.ImageFile != null)
+                if (model.ImageFile != null) // Handle image update
                 {
-                    try
-                    {
                         var imageResponse = await SaveGameImage(model.ImageFile);
                         if (imageResponse.StatusCode == StatusCode.OK)
                         {
@@ -270,14 +195,6 @@ namespace Gamesmarket.Service.Implementations
                             baseResponse.StatusCode = imageResponse.StatusCode;
                             return baseResponse;
                         }
-                    }
-                    catch (InvalidOperationException ex) // Exception due to invalid image format or size
-                    {
-                        baseResponse.Description = ex.Message;
-                        baseResponse.StatusCode = StatusCode.InvalidData;
-                        return baseResponse;
-                    }
-
                 }
                 // Call the repository method to update the game in db
                 await _gameRepository.Update(game);
@@ -298,7 +215,6 @@ namespace Gamesmarket.Service.Implementations
         // Method for image saving 
         public async Task<IBaseResponse<string>> SaveGameImage(IFormFile imageFile)
         {
-            // Save the image and return the path
             return await _imageService.SaveImageAsync(imageFile, "game");
         }
     }

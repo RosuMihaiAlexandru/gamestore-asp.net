@@ -3,7 +3,7 @@ using Gamesmarket.Domain.Response;
 using Gamesmarket.Domain.ViewModel.Game;
 using Microsoft.AspNetCore.Http;
 
-namespace Gamesmarket.Service.Interfaces
+namespace Gamesmarket.Interfaces.Services
 {
     public interface IGameService
     { //An interface for implementing various services that provide functions for working with games db.

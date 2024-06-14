@@ -2,7 +2,7 @@
 using Gamesmarket.Domain.Response;
 using Gamesmarket.Domain.ViewModel.Order;
 
-namespace Gamesmarket.Service.Interfaces
+namespace Gamesmarket.Interfaces.Services
 {
     public interface IOrderService
     {

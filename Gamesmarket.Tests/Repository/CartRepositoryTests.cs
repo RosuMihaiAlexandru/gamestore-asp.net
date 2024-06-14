@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using GamesMarket.DAL;
+using Gamesmarket.DAL;
 using Gamesmarket.Domain.Entity;
 using Gamesmarket.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;

@@ -2,8 +2,8 @@
 using Gamesmarket.Domain.Enum;
 using Gamesmarket.Domain.Response;
 using Gamesmarket.Domain.ViewModel.Order;
-using Gamesmarket.Service.Interfaces;
-using GamesMarket.DAL.Interfaces;
+using Gamesmarket.Interfaces.Services;
+using Gamesmarket.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,8 +22,7 @@ namespace Gamesmarket.Service.Implementations
         {
             try
             {
-                // Find the user by username
-                var user = await _userManager
+                var user = await _userManager // Find the user by username
                     .Users
                     .Include(x => x.Cart)
                     .FirstOrDefaultAsync(x => x.UserName == model.Login);
@@ -37,7 +36,6 @@ namespace Gamesmarket.Service.Implementations
                     };
                 }
 
-                // Create a new order
                 var order = new Order()
                 {
                     Email = model.Email,
@@ -47,7 +45,6 @@ namespace Gamesmarket.Service.Implementations
                     GameId = model.GameId
                 };
 
-                // Save the order to the repository
                 await _orderRepository.Create(order);
 
                 return new BaseResponse<Order>()
@@ -70,8 +67,7 @@ namespace Gamesmarket.Service.Implementations
         {
             try
             {
-                // Find the order by id and include related cart
-                var order = _orderRepository.GetAll()
+                var order = _orderRepository.GetAll() // Find the order by id and include related cart
                     .Include(x => x.Cart)
                     .FirstOrDefault(x => x.Id == id);
 
@@ -84,7 +80,6 @@ namespace Gamesmarket.Service.Implementations
                     };
                 }
 
-                // Delete the order from the repository
                 await _orderRepository.Delete(order);
                 return new BaseResponse<bool>()
                 {

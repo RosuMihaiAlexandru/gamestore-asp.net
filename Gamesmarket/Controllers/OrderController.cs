@@ -1,7 +1,7 @@
 ﻿using Gamesmarket.Domain.Entity;
 using Gamesmarket.Domain.Response;
 using Gamesmarket.Domain.ViewModel.Order;
-using Gamesmarket.Service.Interfaces;
+using Gamesmarket.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

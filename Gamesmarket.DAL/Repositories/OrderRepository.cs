@@ -1,6 +1,6 @@
-﻿using GamesMarket.DAL.Interfaces;
+﻿using Gamesmarket.DAL.Interfaces;
 using Gamesmarket.Domain.Entity;
-using GamesMarket.DAL;
+using Gamesmarket.DAL;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gamesmarket.DAL.Repositories

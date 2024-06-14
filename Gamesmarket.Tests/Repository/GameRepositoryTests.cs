@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
-using GamesMarket.DAL;
+using Gamesmarket.DAL;
 using Gamesmarket.Domain.Entity;
 using Gamesmarket.Domain.Enum;
-using GamesMarket.DAL.Repositories;
+using Gamesmarket.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 

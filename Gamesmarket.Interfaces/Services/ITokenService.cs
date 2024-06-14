@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Gamesmarket.Domain.Entity;
 
-namespace Gamesmarket.Service.Interfaces
+namespace Gamesmarket.Interfaces.Services
 {
     public interface ITokenService
     {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace GamesMarket.DAL
+namespace Gamesmarket.DAL
 {
     public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<long>, long>
     {// Class for working with a database

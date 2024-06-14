@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GamesMarket.DAL\Gamesmarket.DAL.csproj" />
+    <ProjectReference Include="..\Gamesmarket.DAL\Gamesmarket.DAL.csproj" />
     <ProjectReference Include="..\Gamesmarket.Domain\Gamesmarket.Domain.csproj" />
     <ProjectReference Include="..\Gamesmarket\Gamesmarket.csproj" />
   </ItemGroup>

@@ -2,8 +2,9 @@
 using Gamesmarket.Domain.Enum;
 using Gamesmarket.Domain.Response;
 using Gamesmarket.Domain.ViewModel.Order;
-using Gamesmarket.Service.Interfaces;
-using GamesMarket.DAL.Interfaces;
+using Gamesmarket.Interfaces.Services;
+using Gamesmarket.DAL.Interfaces;
+using Gamesmarket.Utilities.Cart;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,8 +25,7 @@ namespace Gamesmarket.Service.Implementations
         {
             try
             {
-                // Find the user by username
-                var user = await _userManager
+                var user = await _userManager // Find the user by username
                     .Users
                     .Include(x => x.Cart)
                         .ThenInclude(x => x.Orders)
@@ -39,9 +39,8 @@ namespace Gamesmarket.Service.Implementations
                         StatusCode = StatusCode.UserNotFound
                     };
                 }
-                // Retrieve orders related to the user's cart
-                var orders = user.Cart?.Orders;
 
+                var orders = user.Cart?.Orders; // Retrieve orders related to the user's cart
                 if (orders == null || !orders.Any())
                 {
                     return new BaseResponse<IEnumerable<OrderViewModel>>()
@@ -50,19 +49,10 @@ namespace Gamesmarket.Service.Implementations
                         StatusCode = StatusCode.OrderNotFound
                     };
                 }
-                
+
                 // Map orders to view models
-                var response = from p in orders
-                               join g in _gameRepository.GetAll() on p.GameId equals g.Id
-                               select new OrderViewModel()
-                               {
-                                   Id = p.Id,
-                                   GameName = g.Name,
-                                   GameDeveloper = g.Developer,
-                                   GameGenre = g.GameGenre.ToString(),
-                                   GamePrice = g.Price.ToString(),
-                                   ImagePath = g.ImagePath
-                               };
+                var games = _gameRepository.GetAll();
+                var response = CartQueriesUtilities.MapOrdersToViewModels(orders, games);
 
                 return new BaseResponse<IEnumerable<OrderViewModel>>()
                 {
@@ -84,8 +74,7 @@ namespace Gamesmarket.Service.Implementations
         {
             try
             {
-                // Find the user by username
-                var user = await _userManager.Users
+                var user = await _userManager.Users // Find the user by username
                     .Include(x => x.Cart)
                         .ThenInclude(x => x.Orders)
                     .FirstOrDefaultAsync(x => x.Email == userName);
@@ -110,19 +99,8 @@ namespace Gamesmarket.Service.Implementations
                     };
                 }
                 // Map order to view model
-                var response = (from p in orders
-                                join g in _gameRepository.GetAll() on p.GameId equals g.Id
-                                select new OrderViewModel()
-                                {
-                                    Id = p.Id,
-                                    GameName = g.Name,
-                                    GameDeveloper = g.Developer,
-                                    GameGenre = g.GameGenre.ToString(),
-                                    GamePrice = g.Price.ToString(),
-                                    Email = p.Email,
-                                    Name = p.Name,
-                                    DateCreate = p.DateCreated.ToLongDateString(),
-                                }).FirstOrDefault();
+                var game = _gameRepository.GetAll().FirstOrDefault(g => g.Id == orders.First().GameId);
+                var response = CartQueriesUtilities.MapOrderToViewModel(orders.First(), game);
 
                 return new BaseResponse<OrderViewModel>()
                 {
@@ -139,6 +117,5 @@ namespace Gamesmarket.Service.Implementations
                 };
             }
         }
-
     }
 }

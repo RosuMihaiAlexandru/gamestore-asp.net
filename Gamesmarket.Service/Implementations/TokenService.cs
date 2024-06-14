@@ -1,6 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Identity;
-using Gamesmarket.Service.Interfaces;
+using Gamesmarket.Interfaces.Services;
 using Gamesmarket.Domain.Entity;
 using Gamesmarket.Service.Extensions;
 using Microsoft.Extensions.Configuration;

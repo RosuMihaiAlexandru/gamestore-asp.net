@@ -3,7 +3,7 @@ using FluentAssertions;
 using Gamesmarket.Domain.Entity;
 using Gamesmarket.Domain.ViewModel.Identity;
 using Gamesmarket.IntegrationTests.Helper;
-using GamesMarket.DAL;
+using Gamesmarket.DAL;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;

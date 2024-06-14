@@ -1,8 +1,8 @@
 ﻿using Gamesmarket.Domain.Entity;
-using GamesMarket.DAL.Interfaces;
+using Gamesmarket.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace GamesMarket.DAL.Repositories
+namespace Gamesmarket.DAL.Repositories
 {
     public class GameRepository : IBaseRepository<Game>
     {//Implementation of async CRUD operations
