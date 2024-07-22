@@ -5,6 +5,8 @@ import AuthService from "../services/AuthService";
 export default class AuthStore {
   user = {} as IUser;
   isAuth = false;
+  isAdmin = false;
+  isModerator = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -14,8 +16,22 @@ export default class AuthStore {
     this.isAuth = bool;
   }
 
+  setAdmin(bool: boolean) {
+    this.isAdmin = bool;
+  }
+
+  setModerator(bool: boolean) {
+    this.isModerator = bool;
+  }
+
   setUser(user: IUser) {
     this.user = user;
+    this.checkUserRole(user.role);
+  }
+
+  checkUserRole(role: string) {
+    this.setAdmin(role === "Administrator");
+    this.setModerator(role === "Moderator");
   }
 
   async login(email: string, password: string) {
@@ -23,8 +39,9 @@ export default class AuthStore {
       const response = await AuthService.login(email, password);
       console.log(response);
       localStorage.setItem("token", response.data.Token);
+
       this.setAuth(true);
-      this.setUser(response.data.user);
+      this.setUser(response.data);
     } catch (e) {
       console.log(e.response?.data?.message);
     }
@@ -58,6 +75,8 @@ export default class AuthStore {
     try {
       localStorage.removeItem("token");
       this.setAuth(false);
+      this.setAdmin(false);
+      this.setModerator(false);
       this.setUser({} as IUser);
     } catch (e) {
       console.log(e.response?.data?.message);
