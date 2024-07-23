@@ -1,4 +1,4 @@
-import { AccountCircle, ShoppingCartOutlined } from "@mui/icons-material";
+import { ShoppingCartOutlined } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { Context } from "../main";
 import { observer } from "mobx-react-lite";
 import Search from "./Search";
+import AccountMenu from "./AccountMenu";
 
 const Header = () => {
   const { rootStore } = useContext(Context);
@@ -39,11 +40,9 @@ const Header = () => {
         <Search />
         <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}>
           <IconButton color="inherit" onClick={() => handleIconClick("/")}>
-            <ShoppingCartOutlined />
+            <ShoppingCartOutlined sx={{ width: 30, height: 30 }} />
           </IconButton>
-          <IconButton color="inherit" onClick={() => handleIconClick("/")}>
-            <AccountCircle />
-          </IconButton>
+          <AccountMenu />
         </Box>
       </Toolbar>
     </AppBar>

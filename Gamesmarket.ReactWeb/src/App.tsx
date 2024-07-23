@@ -14,10 +14,6 @@ function App() {
   const { rootStore } = useContext(Context);
   const { authStore } = rootStore;
 
-  const handleLogout = () => {
-    authStore.logout();
-  };
-
   const theme = createTheme({
     palette: {
       primary: {
@@ -40,15 +36,9 @@ function App() {
             {authStore.isAuth ? `You are authorised` : "Authorise please"}
           </h2>
           <h2>{authStore.isAdmin ? `You are admin wow` : "Admin?"}</h2>
-          {authStore.isAuth ? (
-            <button onClick={handleLogout}>Logout</button>
-          ) : (
-            <>
-              <Link to="/login">Login</Link>
-              <div></div>
-              <Link to="/register">Register</Link>
-            </>
-          )}
+          <Link to="/login">Login</Link>
+          <div />
+          <Link to="/register">Register</Link>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
