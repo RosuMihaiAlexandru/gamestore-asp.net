@@ -9,6 +9,10 @@ import { observer } from "mobx-react-lite";
 import { Context } from "./main";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Box, Container } from "@mui/material";
+import UsersPage from "./pages/admin/UsersPage";
+import AccessDeniedPage from "./pages/redirect/AccessDeniedPage";
+import NotFoundPage from "./pages/redirect/NotFoundPage";
+import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
   const { rootStore } = useContext(Context);
@@ -32,16 +36,22 @@ function App() {
       >
         <Header />
         <Container component="main" sx={{ flexGrow: 1, paddingBottom: "60px" }}>
-          <h2>
+          <h4>
             {authStore.isAuth ? `You are authorised` : "Authorise please"}
-          </h2>
-          <h2>{authStore.isAdmin ? `You are admin wow` : "Admin?"}</h2>
-          <Link to="/login">Login</Link>
-          <div />
-          <Link to="/register">Register</Link>
+          </h4>
+          <h4>{authStore.isAdmin ? `You are admin wow` : "Admin?"}</h4>
+
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route element={<PrivateRoute roles={["Administrator"]} />}>
+              <Route path="/users" element={<UsersPage />} />
+            </Route>
+            <Route
+              element={<PrivateRoute roles={["Administrator", "Moderator"]} />}
+            ></Route>
+            <Route path="/accessDenied" element={<AccessDeniedPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Container>
         <Footer />

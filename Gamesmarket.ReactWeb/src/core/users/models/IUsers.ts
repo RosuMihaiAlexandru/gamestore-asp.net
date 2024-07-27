@@ -3,4 +3,5 @@ export interface IUsers {
   name: string;
   refreshTokenExpiryTime: string;
   email: string;
+  role: string;
 }
