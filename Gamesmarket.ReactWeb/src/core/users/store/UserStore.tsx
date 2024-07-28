@@ -15,12 +15,6 @@ export default class UserStore {
     this.pageSize = pageSize;
   }
 
-  getBoxHeight() {
-    if (this.pageSize === 10) return 635;
-    if (this.pageSize === 25) return 1450;
-    return 375; // default height for other page sizes
-  }
-
   async getUsers() {
     this.isLoading = true;
     try {
@@ -34,6 +28,15 @@ export default class UserStore {
         console.error("Failed to fetch users", error);
         this.isLoading = false;
       });
+    }
+  }
+
+  async changeRole(email: string, newRole: string) {
+    try {
+      const response = await UserService.changeRole(email, newRole);
+      console.log(response);
+    } catch (e) {
+      console.log(e.response?.data);
     }
   }
 }

@@ -3,8 +3,9 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { Context } from "../../../main";
 import { GridColDef, GridPaginationModel } from "@mui/x-data-grid";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Grid } from "@mui/material";
 import StyledDataGrid from "../styles/StyledDataGrid";
+import ChangeRoleForm from "./UI/ChangeRoleForm";
 
 const UsersForm = () => {
   const { rootStore } = useContext(Context);
@@ -26,31 +27,38 @@ const UsersForm = () => {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 100 },
-    { field: "name", headerName: "Name", width: 150 },
+    { field: "name", headerName: "Name", width: 100 },
     { field: "email", headerName: "Email", width: 200 },
     {
       field: "refreshTokenExpiryTime",
       headerName: "Token Expiry Time",
       width: 250,
     },
-    { field: "role", headerName: "Role", width: 200 },
+    { field: "role", headerName: "Role", width: 125 },
   ];
 
   return (
-    <Box sx={{ height: userStore.getBoxHeight(), width: "100%" }}>
+    <Grid container spacing={2} sx={{ height: '100%', width: '100%', mt: 2 }}>
+      <Grid item xs={9}>
+      <Box sx={{ height: '100%', width: '100%' }}>
       <StyledDataGrid
-        rows={userStore.users}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10, 25]}
-        checkboxSelection
-        onPaginationModelChange={handlePaginationModelChange}
-      />
-    </Box>
+            rows={userStore.users}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+            checkboxSelection
+            onPaginationModelChange={handlePaginationModelChange}
+          />
+        </Box>
+      </Grid>
+      <Grid item xs={3}>
+      <ChangeRoleForm />
+      </Grid>
+    </Grid>
   );
 };
 
