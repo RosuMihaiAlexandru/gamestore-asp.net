@@ -1,16 +1,18 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import Logout from "@mui/icons-material/Logout";
-import { AccountCircle } from "@mui/icons-material";
+import {
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Divider,
+  IconButton,
+  Tooltip,
+  Avatar,
+} from "@mui/material";
+import { AccountCircle, Logout } from "@mui/icons-material";
 import { Context } from "../main";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { account_menu } from "./styles/account_menu";
 
 function AccountMenu() {
   const { rootStore } = useContext(Context);
@@ -39,6 +41,7 @@ function AccountMenu() {
     <>
       <Tooltip title="Account settings">
         <IconButton
+          color="inherit"
           onClick={handleClick}
           aria-controls={open ? "account-menu" : undefined}
           aria-haspopup="true"
@@ -55,29 +58,7 @@ function AccountMenu() {
         onClick={handleClose}
         slotProps={{
           paper: {
-            sx: {
-              overflow: "visible",
-              mt: 1.5,
-              "& .MuiAvatar-root": {
-                width: 30,
-                height: 30,
-                ml: -0.5,
-                mr: 1,
-              },
-              "&::before": {
-                // The arrow comes from the menu pointing to the icon
-                content: '""',
-                display: "block",
-                position: "absolute",
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: "background.paper",
-                transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0,
-              },
-            },
+            sx: account_menu.paper,
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}

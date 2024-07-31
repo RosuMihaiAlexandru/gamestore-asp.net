@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { ShoppingCartOutlined } from "@mui/icons-material";
 import {
   AppBar,
@@ -7,8 +8,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import { Context } from "../main";
 import { observer } from "mobx-react-lite";
 import Search from "./Search";
@@ -31,8 +31,21 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
-          <Link href="/" color="inherit" underline="none">
+        <Box
+          sx={{
+            mb: 3,
+            ml: 2,
+            flexGrow: 1,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Link
+            component={ReactRouterLink}
+            to="/"
+            color="inherit"
+            underline="none"
+          >
             <Typography variant="h6" noWrap>
               GamesMarket
             </Typography>
@@ -40,7 +53,15 @@ const Header = () => {
           {authStore.isAdmin || authStore.isModerator ? <AdminPanel /> : null}
         </Box>
         <Search />
-        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}>
+        <Box
+          sx={{
+            mb: 3,
+            mr: 2,
+            flexGrow: 1,
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
           <IconButton color="inherit" onClick={() => handleIconClick("/cart")}>
             <ShoppingCartOutlined sx={{ mr: 1, width: 30, height: 30 }} />
           </IconButton>

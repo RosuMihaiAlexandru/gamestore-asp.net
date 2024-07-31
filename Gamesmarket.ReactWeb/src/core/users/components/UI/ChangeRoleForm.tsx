@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography, Paper } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+  Paper,
+} from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { Context } from "../../../../main";
@@ -13,7 +22,6 @@ const ChangeRoleForm = () => {
   const handleRoleChange = async () => {
     if (email && newRole) {
       await userStore.changeRole(email, newRole);
-      userStore.getUsers(); // Refresh the users list after changing the role
     }
   };
 
@@ -21,12 +29,12 @@ const ChangeRoleForm = () => {
     <Paper
       sx={{
         padding: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        height: '100%',
-        boxSizing: 'border-box'
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        height: "100%",
+        boxSizing: "border-box",
       }}
     >
       <Typography variant="h6" gutterBottom>
@@ -52,7 +60,11 @@ const ChangeRoleForm = () => {
           <MenuItem value="Administrator">Administrator</MenuItem>
         </Select>
       </FormControl>
-      <Button variant="contained" onClick={handleRoleChange} sx={{ width: '100%' }}>
+      <Button
+        variant="contained"
+        onClick={handleRoleChange}
+        sx={{ width: "100%" }}
+      >
         Change Role
       </Button>
     </Paper>

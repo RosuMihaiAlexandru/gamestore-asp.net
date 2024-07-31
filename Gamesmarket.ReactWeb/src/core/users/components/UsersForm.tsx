@@ -3,9 +3,11 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { Context } from "../../../main";
 import { GridColDef, GridPaginationModel } from "@mui/x-data-grid";
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import StyledDataGrid from "../styles/StyledDataGrid";
 import ChangeRoleForm from "./UI/ChangeRoleForm";
+import Snack from "./UI/Snack";
+import Load from "./UI/Load";
 
 const UsersForm = () => {
   const { rootStore } = useContext(Context);
@@ -22,8 +24,12 @@ const UsersForm = () => {
   };
 
   if (userStore.isLoading) {
-    return <CircularProgress />;
+    return <Load />;
   }
+
+  const handleCloseSnack = () => {
+    userStore.closeSnack();
+  };
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 100 },
@@ -38,10 +44,10 @@ const UsersForm = () => {
   ];
 
   return (
-    <Grid container spacing={2} sx={{ height: '100%', width: '100%', mt: 2 }}>
+    <Grid container spacing={2} sx={{ height: "100%", width: "100%", mt: 2 }}>
       <Grid item xs={9}>
-      <Box sx={{ height: '100%', width: '100%' }}>
-      <StyledDataGrid
+        <Box sx={{ height: "100%", width: "100%" }}>
+          <StyledDataGrid
             rows={userStore.users}
             columns={columns}
             initialState={{
@@ -56,8 +62,14 @@ const UsersForm = () => {
         </Box>
       </Grid>
       <Grid item xs={3}>
-      <ChangeRoleForm />
+        <ChangeRoleForm />
       </Grid>
+      <Snack
+        isOpen={userStore.snackOpen}
+        handleClose={handleCloseSnack}
+        message={userStore.snackMessage}
+        severity={userStore.snackSeverity}
+      />
     </Grid>
   );
 };

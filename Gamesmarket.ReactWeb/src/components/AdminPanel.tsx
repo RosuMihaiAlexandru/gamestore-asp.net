@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Drawer, IconButton } from "@mui/material";
-import { AdminPanelSettings } from "@mui/icons-material";
+import { Drawer, IconButton, Typography } from "@mui/material";
+import { AdminPanelSettingsOutlined } from "@mui/icons-material";
 import DrawerList from "./UI/DrawerList";
 
 export default function AdminPanel() {
@@ -13,7 +13,10 @@ export default function AdminPanel() {
   return (
     <div>
       <IconButton onClick={() => toggleDrawer(true)}>
-        <AdminPanelSettings sx={{ ml: 1, width: 30, height: 30 }} />
+        <AdminPanelSettingsOutlined
+          sx={{ color: "white", ml: 1, width: 30, height: 30 }}
+        />
+        <Typography sx={{ color: "white", ml: 1 }}>Admin panel</Typography>
       </IconButton>
       <Drawer open={open} onClose={() => toggleDrawer(false)}>
         <DrawerList toggleDrawer={toggleDrawer} />

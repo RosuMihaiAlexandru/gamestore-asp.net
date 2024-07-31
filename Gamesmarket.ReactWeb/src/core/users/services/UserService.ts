@@ -12,6 +12,9 @@ export default class UserService {
     email: string,
     newRole: string,
   ): Promise<AxiosResponse<RoleChangeResponse>> {
-    return $api.post<RoleChangeResponse>("account/change-role", { email, newRole });
+    return $api.post<RoleChangeResponse>("account/change-role", {
+      email,
+      newRole,
+    });
   }
 }
