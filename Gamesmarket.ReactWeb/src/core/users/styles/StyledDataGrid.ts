@@ -8,7 +8,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     },
   },
   [`& .${gridClasses.columnHeader}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#1c1b22", // Darker background for headers
     color: theme.palette.common.white,
     "& .MuiDataGrid-sortIcon": {
       color: theme.palette.common.white,
@@ -22,6 +22,19 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     "& .MuiDataGrid-checkboxInput": {
       color: theme.palette.common.white,
     },
+  },
+  "& .MuiDataGrid-cell": {
+    color: "#ffffff", // White text color for cells
+  },
+  "& .MuiButtonBase-root": {
+    color: "#ffffff", // White checkbox color
+  },
+  "& .MuiDataGrid-row:hover": {
+    backgroundColor: "#2c2f33", // Slightly darker row on hover
+  },
+  "& .MuiDataGrid-footerContainer": {
+    backgroundColor: "#ccc", // Darker background for footer
+    color: theme.palette.common.white,
   },
 }));
 

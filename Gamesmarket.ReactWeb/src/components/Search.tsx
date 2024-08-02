@@ -27,6 +27,9 @@ function Search() {
             borderRadius: "0 4px 4px 0",
             padding: "10px 15px",
             height: "50px",
+            "&:hover": {
+              backgroundColor: "#e0391d",
+            },
           }}
         >
           <SearchIcon />

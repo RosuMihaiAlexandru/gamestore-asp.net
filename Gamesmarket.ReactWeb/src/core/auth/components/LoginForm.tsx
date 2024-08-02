@@ -1,23 +1,23 @@
 import { FC, useContext, useState } from "react";
 import { Context } from "../../../main";
-import * as React from "react";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {
+  Button,
+  TextField,
+  Link,
+  Box,
+  Typography,
+  IconButton,
+  InputAdornment,
+  Paper,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Link as ReactRouterLink } from "react-router-dom";
 
 const LoginForm: FC = () => {
+  const { authStore } = useContext(Context).rootStore;
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { authStore } = useContext(Context).rootStore;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,14 +29,24 @@ const LoginForm: FC = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "65vh",
+        backgroundColor: "#18161c",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Paper
+        elevation={24}
         sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          padding: 4,
+          width: 400,
+          maxWidth: "90%",
+          backgroundColor: "#2c2f33",
+          color: "#fff",
         }}
       >
         <Typography component="h1" variant="h5">
@@ -52,6 +62,8 @@ const LoginForm: FC = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            InputProps={{ style: { color: "#fff" } }}
+            InputLabelProps={{ style: { color: "#ccc" } }}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
@@ -67,29 +79,47 @@ const LoginForm: FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             InputProps={{
+              style: { color: "#fff" },
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={handleClickShowPassword} edge="end">
+                  <IconButton
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                    sx={{ color: "#fff" }}
+                  >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
+            InputLabelProps={{ style: { color: "#ccc" } }}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 2,
+              backgroundColor: "#ff4020",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#e0391d",
+              },
+            }}
           >
             Sign In
           </Button>
-          <Link href="/register" variant="body2">
+          <Link
+            component={ReactRouterLink}
+            to="/register"
+            variant="body2"
+            sx={{ color: "inherit" }}
+          >
             {"Don't have an account? Sign Up"}
           </Link>
         </Box>
-      </Box>
-    </Container>
+      </Paper>
+    </Box>
   );
 };
 

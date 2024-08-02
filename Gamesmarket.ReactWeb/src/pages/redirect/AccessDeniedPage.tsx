@@ -16,7 +16,7 @@ export default function AccessDeniedPage() {
       }}
     >
       <CssBaseline />
-      <Container sx={{ mt: 8, mb: 2 }}>
+      <Container sx={{ mt: 8, mb: 2, color: "#fff" }}>
         <PanToolIcon sx={{ fontSize: 80, color: "#f50057", mb: 2 }} />
         <Typography variant="h2" sx={{ mb: 1, fontWeight: "bold" }}>
           403 Forbidden

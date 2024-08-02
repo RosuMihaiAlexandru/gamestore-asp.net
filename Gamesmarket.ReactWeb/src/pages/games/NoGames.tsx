@@ -1,8 +1,8 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import { Box, Typography, Container } from "@mui/material";
-import SearchOff from "@mui/icons-material/SearchOff";
+import VideogameAssetOff from "@mui/icons-material/VideogameAssetOff";
 
-export default function NotFoundPage() {
+export default function NoGames() {
   return (
     <Box
       sx={{
@@ -17,12 +17,9 @@ export default function NotFoundPage() {
     >
       <CssBaseline />
       <Container sx={{ mt: 8, mb: 2, color: "#fff" }}>
-        <SearchOff sx={{ fontSize: 80, color: "#f50057", mb: 2 }} />
+        <VideogameAssetOff sx={{ fontSize: 80, color: "#f50057", mb: 2 }} />
         <Typography variant="h2" sx={{ mb: 1, fontWeight: "bold" }}>
-          404 Page not found
-        </Typography>
-        <Typography variant="h5" sx={{ mb: 3 }}>
-          Apologies, but the page you were looking for wasn't found.
+          No games available on request
         </Typography>
       </Container>
     </Box>

@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { Context } from "../../../main";
 import { GridColDef, GridPaginationModel } from "@mui/x-data-grid";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import StyledDataGrid from "../styles/StyledDataGrid";
 import ChangeRoleForm from "./UI/ChangeRoleForm";
 import Snack from "./UI/Snack";
@@ -44,33 +44,44 @@ const UsersForm = () => {
   ];
 
   return (
-    <Grid container spacing={2} sx={{ height: "100%", width: "100%", mt: 2 }}>
-      <Grid item xs={9}>
-        <Box sx={{ height: "100%", width: "100%" }}>
-          <StyledDataGrid
-            rows={userStore.users}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
+    <Box sx={{ backgroundColor: "#18161c", padding: 1 }}>
+      <Typography variant="h4" color="#ffffff" gutterBottom>
+        User Management
+      </Typography>
+      <Grid container spacing={2} sx={{ height: "100%", width: "100%" }}>
+        <Grid item xs={9}>
+          <Box
+            sx={{
+              height: "100%",
+              width: "100%",
+              backgroundColor: "#18161c",
             }}
-            pageSizeOptions={[5, 10, 25]}
-            checkboxSelection
-            onPaginationModelChange={handlePaginationModelChange}
-          />
-        </Box>
+          >
+            <StyledDataGrid
+              rows={userStore.users}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10, 25]}
+              checkboxSelection
+              onPaginationModelChange={handlePaginationModelChange}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={3}>
+          <ChangeRoleForm />
+        </Grid>
+        <Snack
+          isOpen={userStore.snackOpen}
+          handleClose={handleCloseSnack}
+          message={userStore.snackMessage}
+          severity={userStore.snackSeverity}
+        />
       </Grid>
-      <Grid item xs={3}>
-        <ChangeRoleForm />
-      </Grid>
-      <Snack
-        isOpen={userStore.snackOpen}
-        handleClose={handleCloseSnack}
-        message={userStore.snackMessage}
-        severity={userStore.snackSeverity}
-      />
-    </Grid>
+    </Box>
   );
 };
 

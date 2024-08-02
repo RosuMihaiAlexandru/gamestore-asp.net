@@ -1,21 +1,22 @@
 import { FC, useContext, useState } from "react";
 import { Context } from "../../../main";
-import * as React from "react";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Alert from "@mui/material/Alert";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  IconButton,
+  InputAdornment,
+  Alert,
+  Paper,
+  Link,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { validatePassword } from "../utils/validatePassword";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Link as ReactRouterLink } from "react-router-dom";
 
 const RegisterForm: FC = () => {
+  const { authStore } = useContext(Context).rootStore;
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordConfirm, setPasswordConfirm] = useState<string>("");
@@ -25,7 +26,6 @@ const RegisterForm: FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordConfirm, setShowPasswordConfirm] =
     useState<boolean>(false);
-  const { authStore } = useContext(Context).rootStore;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -55,17 +55,27 @@ const RegisterForm: FC = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "95vh",
+        backgroundColor: "#18161c",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Paper
+        elevation={24}
         sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          padding: 4,
+          width: 400,
+          maxWidth: "90%",
+          backgroundColor: "#2c2f33",
+          color: "#fff",
         }}
       >
-        <Typography component="h1" variant="h5">
+        <Typography variant="h4" align="center" gutterBottom>
           Register
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -78,6 +88,8 @@ const RegisterForm: FC = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            InputProps={{ style: { color: "#fff" } }}
+            InputLabelProps={{ style: { color: "#ccc" } }}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
@@ -89,6 +101,8 @@ const RegisterForm: FC = () => {
             type="date"
             id="birthDate"
             autoComplete="bday"
+            InputProps={{ style: { color: "#fff" } }}
+            InputLabelProps={{ style: { color: "#ccc" } }}
             onChange={handleBirthDateChange}
             value={birthDate ? birthDate.toISOString().substring(0, 10) : ""}
           />
@@ -100,6 +114,8 @@ const RegisterForm: FC = () => {
             label="Name"
             name="name"
             autoComplete="name"
+            InputProps={{ style: { color: "#fff" } }}
+            InputLabelProps={{ style: { color: "#ccc" } }}
             onChange={(e) => setName(e.target.value)}
             value={name}
           />
@@ -112,20 +128,26 @@ const RegisterForm: FC = () => {
             type={showPassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setPasswordError(null); // Clear error message when user types
-            }}
-            value={password}
             InputProps={{
+              style: { color: "#fff" },
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={handleClickShowPassword} edge="end">
+                  <IconButton
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                    sx={{ color: "#fff" }}
+                  >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
+            InputLabelProps={{ style: { color: "#ccc" } }}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setPasswordError(null); // Clear error message when user types
+            }}
+            value={password}
           />
           <TextField
             margin="normal"
@@ -136,36 +158,53 @@ const RegisterForm: FC = () => {
             type={showPasswordConfirm ? "text" : "password"}
             id="passwordConfirm"
             autoComplete="current-password"
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-            value={passwordConfirm}
             InputProps={{
+              style: { color: "#fff" },
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     onClick={handleClickShowPasswordConfirm}
                     edge="end"
+                    sx={{ color: "#fff" }}
                   >
                     {showPasswordConfirm ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
+            InputLabelProps={{ style: { color: "#ccc" } }}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+            value={passwordConfirm}
           />
           {passwordError && <Alert severity="error">{passwordError}</Alert>}
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 2,
+              backgroundColor: "#ff4020",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#e0391d",
+              },
+            }}
           >
             Sign up
           </Button>
-          <Link href="login" variant="body2">
-            {"Already have an account? Sign in"}
-          </Link>
+          <Typography align="center" sx={{ mt: 2 }}>
+            <Link
+              component={ReactRouterLink}
+              to="/login"
+              variant="body2"
+              sx={{ color: "inherit" }}
+            >
+              {"Already have an account? Sign in"}
+            </Link>
+          </Typography>
         </Box>
-      </Box>
-    </Container>
+      </Paper>
+    </Box>
   );
 };
 
