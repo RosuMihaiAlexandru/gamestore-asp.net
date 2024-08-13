@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
-import { Context } from "../main";
+import { Context } from "../../main";
 import { observer } from "mobx-react-lite";
 import Search from "./Search";
 import AccountMenu from "./AccountMenu";

@@ -1,10 +1,11 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { Context } from "../../../main";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import GameItem from "./UI/GameItem";
-import Load from "./UI/Load";
+import Load from "../../../components/UI/Load";
 import NoGames from "../../../pages/games/NoGames";
 import StyledPagination from "../styles/StyledPagination";
+import { observer } from "mobx-react-lite";
 
 const GameList: FC = () => {
   const { rootStore } = useContext(Context);
@@ -13,14 +14,14 @@ const GameList: FC = () => {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    gameStore.getGames();
+      gameStore.getGames();
   }, [gameStore]);
 
   if (gameStore.isLoading) {
     return <Load />;
   }
 
-  if (gameStore.games.length === 0) {
+  if ( gameStore.games.length === 0) {
     return <NoGames />;
   }
 
@@ -38,10 +39,6 @@ const GameList: FC = () => {
 
   return (
     <Box>
-      <Typography variant="h4" sx={{ mt: 6, color: "#fff" }}>
-        {" "}
-        All Games
-      </Typography>
       <Grid container spacing={4}>
         {paginatedGames.map((game) => (
           <GameItem key={game.id} game={game} />
@@ -58,4 +55,4 @@ const GameList: FC = () => {
   );
 };
 
-export default GameList;
+export default observer(GameList);

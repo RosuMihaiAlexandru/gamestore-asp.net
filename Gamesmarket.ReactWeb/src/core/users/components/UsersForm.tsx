@@ -6,8 +6,8 @@ import { GridColDef, GridPaginationModel } from "@mui/x-data-grid";
 import { Box, Grid, Typography } from "@mui/material";
 import StyledDataGrid from "../styles/StyledDataGrid";
 import ChangeRoleForm from "./UI/ChangeRoleForm";
-import Snack from "./UI/Snack";
-import Load from "./UI/Load";
+import Snack from "../../../components/UI/Snack";
+import Load from "../../../components/UI/Load";
 
 const UsersForm = () => {
   const { rootStore } = useContext(Context);

@@ -2,7 +2,7 @@ import { FC, useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { Context } from "../../../main";
-import Load from "./UI/Load";
+import Load from "../../../components/UI/Load";
 import { API_URL_IMG } from "../../../http";
 import {
   Grid,
@@ -13,6 +13,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
+import NoGames from "../../../pages/games/NoGames";
 
 const GameDetails: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,8 +31,12 @@ const GameDetails: FC = () => {
     return <Load />;
   }
 
+  if (!gameStore.game || !gameStore.game.id) {
+    return <NoGames />;
+  }
+
   return (
-    <Box sx={{ mt: 8, }}>
+    <Box sx={{ mt: 8 }}>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6.5}>
           <Card>
@@ -84,10 +89,10 @@ const GameDetails: FC = () => {
 
         <Grid item xs={12} md={6.5}>
           <Box>
-            <Typography variant="h4" sx={{ mb: 3, color: "#fff",}}>
+            <Typography variant="h4" sx={{ mb: 3, color: "#fff" }}>
               About
             </Typography>
-            <Typography variant="body1" sx={{color: '#999'}}>
+            <Typography variant="body1" sx={{ color: "#999" }}>
               {game.description}
             </Typography>
           </Box>
@@ -96,18 +101,18 @@ const GameDetails: FC = () => {
         <Grid item xs={12} md={5.5}>
           <CardContent sx={{ mt: 6.5 }}>
             <Grid container spacing={2}>
-              <Grid item xs={6} sx={{color: '#999'}}>
+              <Grid item xs={6} sx={{ color: "#999" }}>
                 <Typography variant="body1" gutterBottom>
-                Developer:
+                  Developer:
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                Release Date:
+                  Release Date:
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                Genre:
+                  Genre:
                 </Typography>
               </Grid>
-              <Grid item xs={6} sx={{color: '#fff'}}>
+              <Grid item xs={6} sx={{ color: "#fff" }}>
                 <Typography variant="body1" gutterBottom>
                   {game.developer}
                 </Typography>

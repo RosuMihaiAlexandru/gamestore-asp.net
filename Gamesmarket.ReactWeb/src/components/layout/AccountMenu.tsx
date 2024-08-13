@@ -9,7 +9,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { AccountCircle, Logout } from "@mui/icons-material";
-import { Context } from "../main";
+import { Context } from "../../main";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { account_menu } from "./styles/account_menu";

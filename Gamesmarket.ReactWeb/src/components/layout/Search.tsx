@@ -2,8 +2,21 @@ import { TextField, IconButton, Box, Typography, Link } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { bottom_search_text } from "./styles/bottom_search_text";
 import { Link as ReactRouterLink } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Context } from "../../main";
+import { useNavigate } from "react-router-dom";
 
 function Search() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const { rootStore } = useContext(Context);
+  const { gameStore } = rootStore;
+  const navigate = useNavigate();
+
+  const handleSearch = async () => {
+    await gameStore.searchGames(searchQuery);
+    navigate("/search-results");
+  };
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 2 }}>
       <Box sx={{ mt: 2, display: "flex", width: "100%" }}>
@@ -11,6 +24,8 @@ function Search() {
           type="search"
           placeholder="What are you looking for?"
           variant="outlined"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           sx={{
             flexGrow: 1,
             backgroundColor: "white",
@@ -31,6 +46,7 @@ function Search() {
               backgroundColor: "#e0391d",
             },
           }}
+          onClick={handleSearch}
         >
           <SearchIcon />
         </IconButton>

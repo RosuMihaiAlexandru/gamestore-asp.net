@@ -10,4 +10,9 @@ export default class GameService {
   static getGame(id: number): Promise<AxiosResponse<IGame>> {
     return $api.get<IGame>(`/game/getGame/${id}`);
   }
+
+  static searchGames(searchQuery: string): Promise<AxiosResponse<IGame[]>> {
+    const encodedQuery = encodeURIComponent(searchQuery);
+    return $api.get<IGame[]>(`/game/findGamesByNameOrDev/${encodedQuery}`);
+  }
 }

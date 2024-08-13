@@ -2,8 +2,8 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
 import { observer } from "mobx-react-lite";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Box, Container, CssBaseline } from "@mui/material";
@@ -13,6 +13,7 @@ import NotFoundPage from "./pages/redirect/NotFoundPage";
 import PrivateRoute from "./routes/PrivateRoute";
 import GamesPage from "./pages/games/GamesPage";
 import GameDetails from "./core/game/components/GameDetails";
+import SearchResultsPage from "./pages/games/SearchResultsPage";
 
 function App() {
   const theme = createTheme({
@@ -42,6 +43,7 @@ function App() {
           <Routes>
             <Route path="/games" element={<GamesPage />} />
             <Route path="/game/:id" element={<GameDetails />} />
+            <Route path="/search-results" element={<SearchResultsPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route element={<PrivateRoute roles={["Administrator"]} />}>

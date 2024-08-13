@@ -6,6 +6,7 @@ export default class GameStore {
   game = {} as IGame;
   games: IGame[] = [];
   isLoading = false;
+  errorMessage: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -16,7 +17,7 @@ export default class GameStore {
     try {
       const response = await GameService.getGames();
       runInAction(() => {
-        this.games = response.data;
+          this.games = response.data;
         this.isLoading = false;
       });
     } catch (error) {
@@ -38,6 +39,26 @@ export default class GameStore {
     } catch (error) {
       runInAction(() => {
         console.error("Failed to get game", error);
+        this.isLoading = false;
+      });
+    }
+  }
+
+  async searchGames(searchQuery: string) {
+    this.isLoading = true;
+    this.errorMessage = null;
+    try {
+      const response = await GameService.searchGames(searchQuery);
+      runInAction(() => {
+        this.games = response.data;
+        this.isLoading = false;
+      });
+    } catch (error: any) {
+      runInAction(() => {
+        this.errorMessage = "Game not found";
+        console.error(this.errorMessage);
+        console.error(error);
+        this.games = [];
         this.isLoading = false;
       });
     }
