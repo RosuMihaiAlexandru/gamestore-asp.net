@@ -41,7 +41,7 @@ export default class AuthStore {
       localStorage.setItem("token", response.data.token);
       this.setAuth(true);
       this.setUser(response.data);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.response?.data?.message);
     }
   }
@@ -65,7 +65,7 @@ export default class AuthStore {
       localStorage.setItem("token", response.data.token);
       this.setAuth(true);
       this.setUser(response.data);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.response?.data?.message);
     }
   }
@@ -77,7 +77,7 @@ export default class AuthStore {
       this.setAdmin(false);
       this.setModerator(false);
       this.setUser({} as IUser);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.response?.data?.message);
     }
   }

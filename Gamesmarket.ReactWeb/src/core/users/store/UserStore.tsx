@@ -30,10 +30,13 @@ export default class UserStore {
         this.users = response.data;
         this.isLoading = false;
       });
-    } catch (error) {
+    } catch (e: any) {
       runInAction(() => {
-        console.error("Failed to fetch users", error);
+        console.error("Failed to fetch users", e);
         this.isLoading = false;
+        this.snackMessage = e.response?.data || "Failed to fetch users";
+        this.snackSeverity = "error";
+        this.snackOpen = true;
       });
     }
   }
@@ -48,7 +51,7 @@ export default class UserStore {
         this.snackOpen = true;
         this.getUsers(); // Refresh the users list after changing the role
       });
-    } catch (e) {
+    } catch (e: any) {
       runInAction(() => {
         this.snackMessage = e.response?.data || "An error occurred";
         this.snackSeverity = "error";

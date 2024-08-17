@@ -14,6 +14,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import GamesPage from "./pages/games/GamesPage";
 import GameDetails from "./core/game/components/GameDetails";
 import SearchResultsPage from "./pages/games/SearchResultsPage";
+import CreateGamePage from "./pages/admin/CreateGamePage";
 
 function App() {
   const theme = createTheme({
@@ -48,6 +49,11 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route element={<PrivateRoute roles={["Administrator"]} />}>
               <Route path="/users" element={<UsersPage />} />
+            </Route>
+            <Route
+              element={<PrivateRoute roles={["Administrator", "Moderator"]} />}
+            >
+              <Route path="/creategame" element={<CreateGamePage />} />
             </Route>
             <Route path="/accessDenied" element={<AccessDeniedPage />} />
             <Route path="*" element={<NotFoundPage />} />

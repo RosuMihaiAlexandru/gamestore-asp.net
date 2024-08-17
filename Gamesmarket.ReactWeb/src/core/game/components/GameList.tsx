@@ -11,17 +11,17 @@ const GameList: FC = () => {
   const { rootStore } = useContext(Context);
   const { gameStore } = rootStore;
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 9;
 
   useEffect(() => {
-      gameStore.getGames();
+    gameStore.getGames();
   }, [gameStore]);
 
   if (gameStore.isLoading) {
     return <Load />;
   }
 
-  if ( gameStore.games.length === 0) {
+  if (gameStore.games.length === 0) {
     return <NoGames />;
   }
 

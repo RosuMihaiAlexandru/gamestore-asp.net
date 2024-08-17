@@ -1,16 +1,19 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import {
   Box,
   Card,
   CardContent,
   CardMedia,
   Grid,
+  IconButton,
   Typography,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { observer } from "mobx-react-lite";
 import { IGame } from "../../models/IGame";
 import { API_URL_IMG } from "../../../../http";
 import { useNavigate } from "react-router-dom";
+import { Context } from "../../../../main";
 
 interface GameItemProps {
   game: IGame;
@@ -18,9 +21,16 @@ interface GameItemProps {
 
 const GameItem: FC<GameItemProps> = ({ game }) => {
   const navigate = useNavigate();
+  const { rootStore } = useContext(Context);
+  const { authStore, gameStore } = rootStore;
 
   const handleClick = () => {
     navigate(`/game/${game.id}`);
+  };
+
+  const handleDelete = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+    await gameStore.deleteGame(game.id);
   };
 
   return (
@@ -60,6 +70,16 @@ const GameItem: FC<GameItemProps> = ({ game }) => {
               <Typography variant="h6">{game.price}$</Typography>
             </Box>
           </CardContent>
+          {(authStore.user.role === "Administrator" ||
+            authStore.user.role === "Moderator") && (
+            <IconButton
+              aria-label="delete"
+              onClick={handleDelete}
+              sx={{ color: "#f50057" }}
+            >
+              <DeleteIcon sx={{ fontSize: 30 }} />
+            </IconButton>
+          )}
         </div>
       </Card>
     </Grid>

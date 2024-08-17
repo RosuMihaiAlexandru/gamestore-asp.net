@@ -12,11 +12,7 @@ const SearchResultsPage: React.FC = () => {
     <div>
       <Box sx={{ mt: 4, color: "#fff" }}>
         <Typography variant="h4">Search Results</Typography>
-        {gameStore.errorMessage ? (
-          <NoGames />
-        ) : (
-          <GameList />
-        )}
+        {gameStore.errorMessage ? <NoGames /> : <GameList />}
       </Box>
     </div>
   );

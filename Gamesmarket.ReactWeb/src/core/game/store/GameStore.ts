@@ -7,9 +7,22 @@ export default class GameStore {
   games: IGame[] = [];
   isLoading = false;
   errorMessage: string | null = null;
+  snackMessage: string = "";
+  snackSeverity: "success" | "error" = "success";
+  snackOpen: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  closeSnack() {
+    this.snackOpen = false;
+  }
+
+  showSnack(message: string, severity: "success" | "error" = "success") {
+    this.snackMessage = message;
+    this.snackSeverity = severity;
+    this.snackOpen = true;
   }
 
   async getGames() {
@@ -17,7 +30,7 @@ export default class GameStore {
     try {
       const response = await GameService.getGames();
       runInAction(() => {
-          this.games = response.data;
+        this.games = response.data;
         this.isLoading = false;
       });
     } catch (error) {
@@ -44,6 +57,70 @@ export default class GameStore {
     }
   }
 
+  async createGame(
+    id: number,
+    name: string,
+    developer: string,
+    description: string,
+    price: string,
+    releaseDate: Date,
+    gameGenre: string,
+    imageFile: File,
+  ) {
+    this.isLoading = true;
+    try {
+      const formData = new FormData();
+      formData.append("id", id.toString());
+      formData.append("name", name);
+      formData.append("developer", developer);
+      formData.append("description", description);
+      formData.append("price", price);
+      formData.append("releaseDate", releaseDate.toISOString());
+      formData.append("gameGenre", gameGenre);
+      formData.append("imageFile", imageFile);
+
+      const response = await GameService.createGame(formData);
+
+      runInAction(() => {
+        this.isLoading = false;
+        this.snackMessage = response.data.description;
+        this.snackSeverity = "success";
+        this.snackOpen = true;
+      });
+    } catch (e: any) {
+      runInAction(() => {
+        console.log(e.response?.data?.message);
+        this.isLoading = false;
+        this.snackMessage =
+          e.response?.data.description || "Failed to create a game";
+        this.snackSeverity = "error";
+        this.snackOpen = true;
+      });
+    }
+  }
+
+  async deleteGame(id: number) {
+    this.isLoading = true;
+    try {
+      const response = await GameService.deleteGame(id);
+      runInAction(() => {
+        this.snackMessage = response.data.description;
+        this.snackSeverity = "success";
+        this.snackOpen = true;
+        this.isLoading = false;
+      });
+    } catch (e: any) {
+      runInAction(() => {
+        console.log(e.response?.data?.description);
+        this.snackMessage =
+          e.response?.data.message || "Failed to delete the game";
+        this.snackSeverity = "error";
+        this.snackOpen = true;
+        this.isLoading = false;
+      });
+    }
+  }
+
   async searchGames(searchQuery: string) {
     this.isLoading = true;
     this.errorMessage = null;
@@ -53,11 +130,11 @@ export default class GameStore {
         this.games = response.data;
         this.isLoading = false;
       });
-    } catch (error: any) {
+    } catch (e: any) {
       runInAction(() => {
         this.errorMessage = "Game not found";
         console.error(this.errorMessage);
-        console.error(error);
+        console.error(e);
         this.games = [];
         this.isLoading = false;
       });

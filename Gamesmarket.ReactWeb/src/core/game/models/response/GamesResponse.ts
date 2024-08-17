@@ -1,6 +1,5 @@
-import { IGame } from "../IGame";
-
+import { IGameCreation } from "../IGameCreation";
 export interface GamesResponse {
-  token: string;
-  game: IGame;
+  game: IGameCreation;
+  description: string;
 }

@@ -39,7 +39,7 @@ const DrawerList: React.FC<DrawerListProps> = ({ toggleDrawer }) => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => handleNavigation("/")}>
+          <ListItemButton onClick={() => handleNavigation("/creategame")}>
             <ListItemIcon>
               <AddIcon />
             </ListItemIcon>
