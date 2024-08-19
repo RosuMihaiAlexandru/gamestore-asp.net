@@ -99,6 +99,48 @@ export default class GameStore {
     }
   }
 
+  async editGame(
+    id: number,
+    name: string,
+    developer: string,
+    description: string,
+    price: string,
+    releaseDate: Date,
+    gameGenre: string,
+    imageFile: File,
+  ) {
+    this.isLoading = true;
+    try {
+      const formData = new FormData();
+      formData.append("id", id.toString());
+      formData.append("name", name);
+      formData.append("developer", developer);
+      formData.append("description", description);
+      formData.append("price", price);
+      formData.append("releaseDate", releaseDate.toISOString());
+      formData.append("gameGenre", gameGenre);
+      formData.append("imageFile", imageFile);
+
+      const response = await GameService.editGame(id, formData);
+
+      runInAction(() => {
+        this.isLoading = false;
+        this.snackMessage = response.data.description;
+        this.snackSeverity = "success";
+        this.snackOpen = true;
+      });
+    } catch (e: any) {
+      runInAction(() => {
+        console.log(e.response?.data?.message);
+        this.isLoading = false;
+        this.snackMessage =
+          e.response?.data.description || "Failed to edit a game";
+        this.snackSeverity = "error";
+        this.snackOpen = true;
+      });
+    }
+  }
+
   async deleteGame(id: number) {
     this.isLoading = true;
     try {

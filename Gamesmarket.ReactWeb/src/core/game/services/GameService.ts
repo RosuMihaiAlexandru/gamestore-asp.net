@@ -21,6 +21,17 @@ export default class GameService {
     });
   }
 
+  static editGame(
+    id: number,
+    formData: FormData,
+  ): Promise<AxiosResponse<GamesResponse>> {
+    return $api.patch<GamesResponse>(`/game/editGame/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  }
+
   static deleteGame(id: number): Promise<AxiosResponse<DeleteGameResponse>> {
     return $api.delete<DeleteGameResponse>(`/game/delete/${id}`);
   }

@@ -15,6 +15,7 @@ import GamesPage from "./pages/games/GamesPage";
 import GameDetails from "./core/game/components/GameDetails";
 import SearchResultsPage from "./pages/games/SearchResultsPage";
 import CreateGamePage from "./pages/admin/CreateGamePage";
+import EditGamePage from "./pages/admin/EditGamePage";
 
 function App() {
   const theme = createTheme({
@@ -54,6 +55,7 @@ function App() {
               element={<PrivateRoute roles={["Administrator", "Moderator"]} />}
             >
               <Route path="/creategame" element={<CreateGamePage />} />
+              <Route path="/editgame/:id" element={<EditGamePage />} />
             </Route>
             <Route path="/accessDenied" element={<AccessDeniedPage />} />
             <Route path="*" element={<NotFoundPage />} />

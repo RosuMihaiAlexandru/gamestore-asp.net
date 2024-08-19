@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { observer } from "mobx-react-lite";
 import { IGame } from "../../models/IGame";
 import { API_URL_IMG } from "../../../../http";
@@ -26,6 +27,11 @@ const GameItem: FC<GameItemProps> = ({ game }) => {
 
   const handleClick = () => {
     navigate(`/game/${game.id}`);
+  };
+
+  const handleEditClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    navigate(`/editgame/${game.id}`);
   };
 
   const handleDelete = async (event: React.MouseEvent) => {
@@ -72,13 +78,35 @@ const GameItem: FC<GameItemProps> = ({ game }) => {
           </CardContent>
           {(authStore.user.role === "Administrator" ||
             authStore.user.role === "Moderator") && (
-            <IconButton
-              aria-label="delete"
-              onClick={handleDelete}
-              sx={{ color: "#f50057" }}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                px: 1,
+              }}
             >
-              <DeleteIcon sx={{ fontSize: 30 }} />
-            </IconButton>
+              <IconButton onClick={handleEditClick} sx={{ color: "#f50057" }}>
+                <EditIcon
+                  sx={{
+                    fontSize: 30,
+                    "&:hover": {
+                      backgroundColor: "#302629",
+                    },
+                  }}
+                />
+              </IconButton>
+              <IconButton onClick={handleDelete} sx={{ color: "#f50057" }}>
+                <DeleteIcon
+                  sx={{
+                    fontSize: 30,
+                    "&:hover": {
+                      backgroundColor: "#302629",
+                    },
+                  }}
+                />
+              </IconButton>
+            </Box>
           )}
         </div>
       </Card>

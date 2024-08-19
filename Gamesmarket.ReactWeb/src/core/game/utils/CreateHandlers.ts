@@ -52,14 +52,29 @@ export const handleSubmit = async (
     return;
   }
 
-  await gameStore.createGame(
-    formData.id,
-    formData.name,
-    formData.developer,
-    formData.description,
-    formData.price,
-    new Date(formData.releaseDate),
-    formData.gameGenre.toString(),
-    formData.imageFile,
-  );
+  if (formData.id) {
+    // If we have an ID, it means we are editing an existing game
+    await gameStore.editGame(
+      formData.id,
+      formData.name,
+      formData.developer,
+      formData.description,
+      formData.price,
+      new Date(formData.releaseDate),
+      formData.gameGenre.toString(),
+      formData.imageFile,
+    );
+  } else {
+    // If not, create a new game
+    await gameStore.createGame(
+      formData.id,
+      formData.name,
+      formData.developer,
+      formData.description,
+      formData.price,
+      new Date(formData.releaseDate),
+      formData.gameGenre.toString(),
+      formData.imageFile,
+    );
+  }
 };
