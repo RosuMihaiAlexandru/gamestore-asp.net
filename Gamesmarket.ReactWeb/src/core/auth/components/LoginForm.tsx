@@ -14,14 +14,15 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link as ReactRouterLink } from "react-router-dom";
 
 const LoginForm: FC = () => {
-  const { authStore } = useContext(Context).rootStore;
+  const { authStore, cartStore } = useContext(Context).rootStore;
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    authStore.login(email, password);
+    await authStore.login(email, password);
+    await cartStore.getOrders();
   };
 
   const handleClickShowPassword = () => {

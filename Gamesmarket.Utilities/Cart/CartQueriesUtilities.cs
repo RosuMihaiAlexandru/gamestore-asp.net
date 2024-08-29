@@ -14,10 +14,9 @@ namespace Gamesmarket.Utilities.Cart
                    select new OrderViewModel
                    {
                        Id = p.Id,
+                       GameId = g.Id,
                        GameName = g.Name,
-                       GameDeveloper = g.Developer,
-                       GameGenre = g.GameGenre.ToString(),
-                       GamePrice = g.Price.ToString(),
+                       GamePrice = g.Price,
                        ImagePath = g.ImagePath
                    };
         }
@@ -30,10 +29,10 @@ namespace Gamesmarket.Utilities.Cart
                 GameName = game.Name,
                 GameDeveloper = game.Developer,
                 GameGenre = game.GameGenre.ToString(),
-                GamePrice = game.Price.ToString(),
+                GamePrice = game.Price,
                 Email = order.Email,
                 Name = order.Name,
-                DateCreate = order.DateCreated.ToLongDateString()
+                DateCreate = order.DateCreated.ToShortDateString()
             };
         }
     }

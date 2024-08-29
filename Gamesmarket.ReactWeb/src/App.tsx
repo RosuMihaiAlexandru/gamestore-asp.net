@@ -16,8 +16,14 @@ import GameDetails from "./core/game/components/GameDetails";
 import SearchResultsPage from "./pages/games/SearchResultsPage";
 import CreateGamePage from "./pages/admin/CreateGamePage";
 import EditGamePage from "./pages/admin/EditGamePage";
+import CartPage from "./pages/cart/CartPage";
+import { Context } from "./main";
+import { useContext } from "react";
 
 function App() {
+  const { rootStore } = useContext(Context);
+  const { cartStore } = rootStore;
+
   const theme = createTheme({
     palette: {
       primary: {
@@ -40,7 +46,7 @@ function App() {
           backgroundColor: "#18161c",
         }}
       >
-        <Header />
+        <Header orderLen={cartStore.orders.length} />
         <Container component="main" sx={{ flexGrow: 1, paddingBottom: "60px" }}>
           <Routes>
             <Route path="/games" element={<GamesPage />} />
@@ -48,6 +54,13 @@ function App() {
             <Route path="/search-results" element={<SearchResultsPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route
+              element={
+                <PrivateRoute roles={["User", "Moderator", "Administrator"]} />
+              }
+            >
+              <Route path="/cart" element={<CartPage />} />
+            </Route>
             <Route element={<PrivateRoute roles={["Administrator"]} />}>
               <Route path="/users" element={<UsersPage />} />
             </Route>

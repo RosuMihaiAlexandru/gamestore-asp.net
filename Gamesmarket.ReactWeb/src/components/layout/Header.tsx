@@ -1,7 +1,8 @@
-import { useContext } from "react";
+import { FC, useContext } from "react";
 import { ShoppingCartOutlined } from "@mui/icons-material";
 import {
   AppBar,
+  Badge,
   Box,
   IconButton,
   Link,
@@ -15,7 +16,11 @@ import Search from "./Search";
 import AccountMenu from "./AccountMenu";
 import AdminPanel from "./AdminPanel";
 
-const Header = () => {
+interface HeaderProps {
+  orderLen: number;
+}
+
+const Header: FC<HeaderProps> = ({ orderLen }) => {
   const { rootStore } = useContext(Context);
   const { authStore } = rootStore;
   const navigate = useNavigate();
@@ -63,7 +68,9 @@ const Header = () => {
           }}
         >
           <IconButton color="inherit" onClick={() => handleIconClick("/cart")}>
-            <ShoppingCartOutlined sx={{ mr: 1, width: 30, height: 30 }} />
+            <Badge color="error" badgeContent={orderLen}>
+              <ShoppingCartOutlined sx={{ mr: 1, width: 30, height: 30 }} />
+            </Badge>
           </IconButton>
           <AccountMenu />
         </Box>

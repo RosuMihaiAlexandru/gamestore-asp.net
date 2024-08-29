@@ -1,5 +1,5 @@
 import { FC, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { Context } from "../../../main";
 import Load from "../../../components/UI/Load";
@@ -14,12 +14,14 @@ import {
   Button,
 } from "@mui/material";
 import NoGames from "../../../pages/games/NoGames";
+import Snack from "../../../components/UI/Snack";
 
 const GameDetails: FC = () => {
   const { id } = useParams<{ id: string }>();
   const { rootStore } = useContext(Context);
-  const { gameStore } = rootStore;
+  const { gameStore, orderStore, cartStore, authStore } = rootStore;
   const game = gameStore.game;
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -34,6 +36,22 @@ const GameDetails: FC = () => {
   if (!gameStore.game || !gameStore.game.id) {
     return <NoGames />;
   }
+
+  const handleAddToCart = async () => {
+    if (!authStore.isAuth) {
+      navigate("/login");
+      return;
+    }
+
+    if (game) {
+      await orderStore.createOrder(1, game.id);
+      await cartStore.getOrders();
+    }
+  };
+
+  const handleCloseSnack = () => {
+    orderStore.closeSnack();
+  };
 
   return (
     <Box sx={{ mt: 8 }}>
@@ -79,6 +97,7 @@ const GameDetails: FC = () => {
                       backgroundColor: "#e0391d",
                     },
                   }}
+                  onClick={handleAddToCart}
                 >
                   Add to cart
                 </Button>
@@ -127,6 +146,12 @@ const GameDetails: FC = () => {
           </CardContent>
         </Grid>
       </Grid>
+      <Snack
+        isOpen={orderStore.snackOpen}
+        handleClose={handleCloseSnack}
+        message={orderStore.snackMessage}
+        severity={orderStore.snackSeverity}
+      />
     </Box>
   );
 };

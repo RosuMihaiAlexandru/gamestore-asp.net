@@ -16,7 +16,7 @@ import { validatePassword } from "../utils/validatePassword";
 import { Link as ReactRouterLink } from "react-router-dom";
 
 const RegisterForm: FC = () => {
-  const { authStore } = useContext(Context).rootStore;
+  const { authStore, cartStore } = useContext(Context).rootStore;
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordConfirm, setPasswordConfirm] = useState<string>("");
@@ -27,7 +27,7 @@ const RegisterForm: FC = () => {
   const [showPasswordConfirm, setShowPasswordConfirm] =
     useState<boolean>(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const passwordValidationError = validatePassword(password);
     if (passwordValidationError) {
@@ -39,7 +39,8 @@ const RegisterForm: FC = () => {
       setPasswordError("Passwords do not match");
       return;
     }
-    authStore.register(email, birthDate, password, passwordConfirm, name);
+    await authStore.register(email, birthDate, password, passwordConfirm, name);
+    await cartStore.getOrders();
   };
 
   const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
