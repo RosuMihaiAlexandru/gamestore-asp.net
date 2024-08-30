@@ -15,8 +15,6 @@ namespace Gamesmarket.Interfaces.Services
 
         Task<IBaseResponse<bool>> DeleteGame(int id);
 
-        Task<IBaseResponse<IEnumerable<Game>>> SearchGames(string searchQuery);
-
 		Task<IBaseResponse<Game>> Edit(int id, GameViewModel model);
 
         Task<IBaseResponse<string>> SaveGameImage(IFormFile imageFile);

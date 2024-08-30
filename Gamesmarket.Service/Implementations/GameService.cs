@@ -7,7 +7,6 @@ using Gamesmarket.DAL.Interfaces;
 using Gamesmarket.Utilities.Games;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 
 namespace Gamesmarket.Service.Implementations
 {
@@ -29,16 +28,16 @@ namespace Gamesmarket.Service.Implementations
         public async Task<IBaseResponse<Game>> GetGame(int id)
         {
             var baseResponse = new BaseResponse<Game>();//New object for operations with Game type objects.
-			try
+            try
             {
                 var game = await _gameRepository.Get(id);
-				if (game == null)
-				{
-					baseResponse.Description = "Game not found";
+                if (game == null)
+                {
+                    baseResponse.Description = "Game not found";
                     baseResponse.StatusCode = StatusCode.GameNotFound;
                     return baseResponse;
                 }
-				baseResponse.Data = game;
+                baseResponse.Data = game;
                 return baseResponse;
             }
             catch (Exception ex)
@@ -111,32 +110,6 @@ namespace Gamesmarket.Service.Implementations
             }
         }
 
-        // Method for getting games by its name or developer
-        public async Task<IBaseResponse<IEnumerable<Game>>> SearchGames(string searchQuery)
-        {
-            var baseResponse = new BaseResponse<IEnumerable<Game>>();
-            try
-            {
-                var games = await _gameRepository.GetAll().Where(g => g.Name == searchQuery || g.Developer == searchQuery).ToListAsync();
-                if (games == null || !games.Any())
-                {
-                    baseResponse.Description = "Game not found";
-                    baseResponse.StatusCode = StatusCode.GameNotFound;
-                    return baseResponse;
-                }
-                baseResponse.Data = games;
-                return baseResponse;
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse<IEnumerable<Game>>
-                {
-                    Description = $"[GetGame] : {ex.Message}",
-                    StatusCode = StatusCode.InternalServerError
-                };
-            }
-        }
-
         // Method for getting a list of games 
         public async Task<IBaseResponse<IEnumerable<Game>>> GetGames()
         {
@@ -144,18 +117,18 @@ namespace Gamesmarket.Service.Implementations
             try
             {
                 var games = await _gameRepository.Select();
-				if (games.Count == 0)
+                if (games.Count == 0)
                 {
                     baseResponse.Description = "Found 0 elements";
                     baseResponse.StatusCode = StatusCode.GameNotFound;
                     return baseResponse;
                 }
-				//If games are found, assign the list to the response data
-				baseResponse.Data = games;
+                //If games are found, assign the list to the response data
+                baseResponse.Data = games;
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new BaseResponse<IEnumerable<Game>>
                 {
@@ -165,9 +138,9 @@ namespace Gamesmarket.Service.Implementations
             }
         }
 
-		// Method for data editing 
-		public async Task<IBaseResponse<Game>> Edit(int id, GameViewModel model)
-		{
+        // Method for data editing 
+        public async Task<IBaseResponse<Game>> Edit(int id, GameViewModel model)
+        {
             var baseResponse = new BaseResponse<Game>();
             try
             {
@@ -175,8 +148,8 @@ namespace Gamesmarket.Service.Implementations
                 if (game == null)
                 {
                     baseResponse.StatusCode = StatusCode.GameNotFound;
-					baseResponse.Description = "Game not found";
-					return baseResponse;
+                    baseResponse.Description = "Game not found";
+                    return baseResponse;
                 }
 
                 FileUtilities.DeleteImageFile(game.ImagePath, _hostingEnvironment);
@@ -184,38 +157,39 @@ namespace Gamesmarket.Service.Implementations
 
                 if (model.ImageFile != null) // Handle image update
                 {
-                        var imageResponse = await SaveGameImage(model.ImageFile);
-                        if (imageResponse.StatusCode == StatusCode.OK)
-                        {
-                            game.ImagePath = imageResponse.Data; // Extract the string path from the response
-                        }
-                        else
-                        {
-                            baseResponse.Description = "Game not found";
-                            baseResponse.StatusCode = imageResponse.StatusCode;
-                            return baseResponse;
-                        }
+                    var imageResponse = await SaveGameImage(model.ImageFile);
+                    if (imageResponse.StatusCode == StatusCode.OK)
+                    {
+                        game.ImagePath = imageResponse.Data; // Extract the string path from the response
+                    }
+                    else
+                    {
+                        baseResponse.Description = "Game not found";
+                        baseResponse.StatusCode = imageResponse.StatusCode;
+                        return baseResponse;
+                    }
                 }
                 // Call the repository method to update the game in db
                 await _gameRepository.Update(game);
                 baseResponse.Data = game;
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
-			}
-			catch (Exception ex)
-			{
-				return new BaseResponse<Game>
-				{
-					Description = $"[Edit] : {ex.Message}",
-					StatusCode = StatusCode.InternalServerError
-				};
-			}
-		}
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<Game>
+                {
+                    Description = $"[Edit] : {ex.Message}",
+                    StatusCode = StatusCode.InternalServerError
+                };
+            }
+        }
 
         // Method for image saving 
         public async Task<IBaseResponse<string>> SaveGameImage(IFormFile imageFile)
         {
             return await _imageService.SaveImageAsync(imageFile, "game");
         }
+
     }
 }

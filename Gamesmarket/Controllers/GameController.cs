@@ -101,20 +101,5 @@ namespace Gamesmarket.Controllers
             }
         }
 
-        [HttpGet("findGamesByNameOrDev/{searchQuery}")]
-        public async Task<IActionResult> FindGamesByNameOrDev(string searchQuery)
-        {
-            var response = await _gameService.SearchGames(searchQuery);
-            if (response.StatusCode == Domain.Enum.StatusCode.OK)
-            {
-                return Ok(response.Data);
-            }
-            else
-            {
-                // Cast to BaseResponse<IEnumerable<Game>> to access Description
-                var concreteResponse = (BaseResponse<IEnumerable<Game>>)response;
-                return BadRequest(concreteResponse.Description);
-            }        
-        }
     }
 }
