@@ -1,27 +1,27 @@
-import { FC, useContext, useEffect, useState } from "react";
-import { Context } from "../../../main";
+import { FC, useState } from "react";
 import { Box, Grid } from "@mui/material";
 import GameItem from "./UI/GameItem";
 import Load from "../../../components/UI/Load";
 import NoGames from "../../../pages/games/NoGames";
-import StyledPagination from "../styles/StyledPagination";
+import { StyledPagination } from "../styles/StyledPagination";
 import { observer } from "mobx-react-lite";
+import { IGame } from "../models/IGame";
 
-const GameList: FC = () => {
-  const { rootStore } = useContext(Context);
-  const { gameStore } = rootStore;
+interface GameListProps {
+  games: IGame[];
+  isLoading: boolean;
+  hidePagination?: boolean;
+}
+
+const GameList: FC<GameListProps> = ({ games, isLoading, hidePagination }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
-  useEffect(() => {
-    gameStore.getGames();
-  }, [gameStore]);
-
-  if (gameStore.isLoading) {
+  if (isLoading) {
     return <Load />;
   }
 
-  if (gameStore.games.length === 0) {
+  if (games.length === 0) {
     return <NoGames />;
   }
 
@@ -32,7 +32,7 @@ const GameList: FC = () => {
     setCurrentPage(value);
   };
 
-  const paginatedGames = gameStore.games.slice(
+  const paginatedGames = games.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
@@ -44,13 +44,15 @@ const GameList: FC = () => {
           <GameItem key={game.id} game={game} />
         ))}
       </Grid>
-      <StyledPagination
-        count={Math.ceil(gameStore.games.length / itemsPerPage)}
-        page={currentPage}
-        onChange={handleChangePage}
-        size="large"
-        sx={{ mt: 4, display: "flex", justifyContent: "center" }}
-      />
+      {!hidePagination && (
+        <StyledPagination
+          count={Math.ceil(games.length / itemsPerPage)}
+          page={currentPage}
+          onChange={handleChangePage}
+          size="large"
+          sx={{ mt: 4, display: "flex", justifyContent: "center" }}
+        />
+      )}
     </Box>
   );
 };

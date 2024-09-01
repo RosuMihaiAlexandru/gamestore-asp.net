@@ -35,9 +35,4 @@ export default class GameService {
   static deleteGame(id: number): Promise<AxiosResponse<DeleteGameResponse>> {
     return $api.delete<DeleteGameResponse>(`/game/delete/${id}`);
   }
-
-  static searchGames(searchQuery: string): Promise<AxiosResponse<IGame[]>> {
-    const encodedQuery = encodeURIComponent(searchQuery);
-    return $api.get<IGame[]>(`/game/findGamesByNameOrDev/${encodedQuery}`);
-  }
 }

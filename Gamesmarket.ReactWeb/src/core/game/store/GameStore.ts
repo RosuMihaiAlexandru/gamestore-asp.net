@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { IGame } from "../models/IGame";
 import GameService from "../services/GameService";
+import FilterService from "../../filter/services/FilterService";
 
 export default class GameStore {
   game = {} as IGame;
@@ -167,7 +168,7 @@ export default class GameStore {
     this.isLoading = true;
     this.errorMessage = null;
     try {
-      const response = await GameService.searchGames(searchQuery);
+      const response = await FilterService.searchGames(searchQuery);
       runInAction(() => {
         this.games = response.data;
         this.isLoading = false;

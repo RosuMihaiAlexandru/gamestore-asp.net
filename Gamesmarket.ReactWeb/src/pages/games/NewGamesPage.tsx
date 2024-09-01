@@ -1,13 +1,13 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useState, useContext, useEffect } from "react";
 import GameList from "../../core/game/components/GameList";
 import { Box, SelectChangeEvent, Typography } from "@mui/material";
 import { Context } from "../../main";
 import { observer } from "mobx-react-lite";
 import Filters from "../../core/game/components/UI/GameSelect";
 
-const GamesPage: FC = () => {
+const NewGamesPage: FC = () => {
   const { rootStore } = useContext(Context);
-  const { gameStore, sortStore, filterStore } = rootStore;
+  const { sortStore, filterStore, gameStore } = rootStore;
 
   const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [sortByDate, setSortByDate] = useState<boolean | null>(null);
@@ -21,7 +21,7 @@ const GamesPage: FC = () => {
     } else if (sortByPrice !== null) {
       sortStore.getGamesByPrice(sortByPrice);
     } else {
-      gameStore.getGames();
+      sortStore.getGamesByIdDesc();
     }
   }, [
     selectedGenre,
@@ -53,7 +53,7 @@ const GamesPage: FC = () => {
   return (
     <div>
       <Typography variant="h4" sx={{ mt: 6, color: "#fff" }}>
-        All Games
+        New Games
       </Typography>
 
       <Box sx={{ flexGrow: 1, mt: 4 }}>
@@ -72,4 +72,4 @@ const GamesPage: FC = () => {
   );
 };
 
-export default observer(GamesPage);
+export default observer(NewGamesPage);

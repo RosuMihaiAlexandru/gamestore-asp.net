@@ -6,13 +6,17 @@ import NoGames from "./NoGames";
 
 const SearchResultsPage: React.FC = () => {
   const { rootStore } = useContext(Context);
-  const { gameStore } = rootStore;
+  const { gameStore, filterStore } = rootStore;
 
   return (
     <div>
       <Box sx={{ mt: 4, color: "#fff" }}>
         <Typography variant="h4">Search Results</Typography>
-        {gameStore.errorMessage ? <NoGames /> : <GameList />}
+        {filterStore.errorMessage ? (
+          <NoGames />
+        ) : (
+          <GameList games={gameStore.games} isLoading={gameStore.isLoading} />
+        )}
       </Box>
     </div>
   );

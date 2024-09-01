@@ -9,11 +9,11 @@ import { useNavigate } from "react-router-dom";
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");
   const { rootStore } = useContext(Context);
-  const { gameStore } = rootStore;
+  const { filterStore } = rootStore;
   const navigate = useNavigate();
 
   const handleSearch = async () => {
-    await gameStore.searchGames(searchQuery);
+    await filterStore.searchGames(searchQuery);
     navigate("/search-results");
   };
 
@@ -64,11 +64,11 @@ function Search() {
           </Link>
           <Link
             component={ReactRouterLink}
-            to="/popular"
+            to="/new-games"
             underline="none"
             sx={{ color: "inherit" }}
           >
-            Trending
+            New arrivals
           </Link>
         </Typography>
       </Box>

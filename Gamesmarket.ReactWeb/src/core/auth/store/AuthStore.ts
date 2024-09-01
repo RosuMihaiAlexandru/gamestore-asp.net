@@ -42,7 +42,7 @@ export default class AuthStore {
       this.setAuth(true);
       this.setUser(response.data);
     } catch (e: any) {
-      console.log(e.response?.data?.message);
+      console.log(e.response?.data);
     }
   }
 
@@ -66,7 +66,7 @@ export default class AuthStore {
       this.setAuth(true);
       this.setUser(response.data);
     } catch (e: any) {
-      console.log(e.response?.data?.message);
+      console.log(e.response?.data);
     }
   }
 
@@ -78,7 +78,7 @@ export default class AuthStore {
       this.setModerator(false);
       this.setUser({} as IUser);
     } catch (e: any) {
-      console.log(e.response?.data?.message);
+      console.log(e.response?.data);
     }
   }
 }

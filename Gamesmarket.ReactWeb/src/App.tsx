@@ -17,6 +17,8 @@ import SearchResultsPage from "./pages/games/SearchResultsPage";
 import CreateGamePage from "./pages/admin/CreateGamePage";
 import EditGamePage from "./pages/admin/EditGamePage";
 import CartPage from "./pages/cart/CartPage";
+import NewGamesPage from "./pages/games/NewGamesPage";
+import HomePage from "./pages/home/HomePage";
 import { Context } from "./main";
 import { useContext } from "react";
 
@@ -49,8 +51,10 @@ function App() {
         <Header orderLen={cartStore.orders.length} />
         <Container component="main" sx={{ flexGrow: 1, paddingBottom: "60px" }}>
           <Routes>
+            <Route path="/" element={<HomePage />} />
             <Route path="/games" element={<GamesPage />} />
             <Route path="/game/:id" element={<GameDetails />} />
+            <Route path="/new-games" element={<NewGamesPage />} />
             <Route path="/search-results" element={<SearchResultsPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
