@@ -1,4 +1,5 @@
 ﻿using Gamesmarket.Domain.Entity;
+using Gamesmarket.DAL.DataSeed;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -73,6 +74,8 @@ namespace Gamesmarket.DAL
             adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "Qwe!23");
 
             modelBuilder.Entity<User>().HasData(adminUser);// Add Admin user to db
+
+            modelBuilder.Entity<Game>().HasData(GameSeedData.GetStarterGames().ToArray());
 
             // Assign Admin role to the admin user
             modelBuilder.Entity<IdentityUserRole<long>>().HasData(

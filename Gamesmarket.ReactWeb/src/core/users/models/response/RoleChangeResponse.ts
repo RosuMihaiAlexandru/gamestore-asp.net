@@ -1,3 +1,3 @@
 export interface RoleChangeResponse {
-  message: string;
+  data: string;
 }

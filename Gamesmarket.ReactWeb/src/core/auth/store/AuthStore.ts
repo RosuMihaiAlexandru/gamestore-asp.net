@@ -38,9 +38,9 @@ export default class AuthStore {
     try {
       const response = await AuthService.login(email, password);
       console.log(response);
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data.data.token);
       this.setAuth(true);
-      this.setUser(response.data);
+      this.setUser(response.data.data);
     } catch (e: any) {
       console.log(e.response?.data);
     }
@@ -62,9 +62,9 @@ export default class AuthStore {
         name,
       );
       console.log(response);
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data.data.token);
       this.setAuth(true);
-      this.setUser(response.data);
+      this.setUser(response.data.data);
     } catch (e: any) {
       console.log(e.response?.data);
     }

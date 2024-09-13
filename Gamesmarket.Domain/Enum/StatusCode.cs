@@ -2,11 +2,25 @@
 {
     public enum StatusCode
     {//Various HTTP application status codes
-        UserNotFound = 0,
-        GameNotFound = 10,
-        OrderNotFound = 20,
         OK = 200,
+
         InvalidData = 400,
+
+        Unauthorized = 401,
+
+        PermissionDenied = 403,
+
+        UserNotFound = 404,
+
+        RoleNotFound = 404,
+
+        GameNotFound = 404,
+
+        OrderNotFound = 404,
+
+        RoleChangeFailed = 500,
+
         InternalServerError = 500
+
     }
 }

@@ -28,6 +28,7 @@ namespace Gamesmarket.Configurations
             services.AddScoped<IFileManager, FileManager>();
             services.AddScoped<IFilterService, FilterService>();
             services.AddScoped<ISortService, SortService>();
+            services.AddScoped<IAccountService, AccountService>();
         }
     }
 }

@@ -46,7 +46,7 @@ export default class UserStore {
       const response = await UserService.changeRole(email, newRole);
       console.log(response);
       runInAction(() => {
-        this.snackMessage = response.data;
+        this.snackMessage = response.data.data; 
         this.snackSeverity = "success";
         this.snackOpen = true;
         this.getUsers(); // Refresh the users list after changing the role
