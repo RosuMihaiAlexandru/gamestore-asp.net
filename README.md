@@ -58,20 +58,38 @@ Gamesmarket - the main project, which includes configuration and initialization 
 **Game that was found by search query**
 ![Search](https://github.com/user-attachments/assets/25c016dc-0a72-4bcf-a1f7-451bedbc9065)
 
+**Backend api**
+![api](https://github.com/user-attachments/assets/2aee45ed-fc12-4145-8b45-66d4d9821428)
+
 ## Running the Project.
 
 1. Run the backend:
 
+- Open the solution in Visual Studio or another IDE.
+
+- In Solution Explorer, set the Gamesmarket as startup project.
+
+- Select the https startup profile in the Run toolbar.
+
+- Click the Run button or use the following command to run in the terminal:
+   
    In Gamesmarket\Gamesmarket
    ```sh
-   dotnet build
-   dotnet run
-   ```
+   dotnet run --launch-profile https
+    ```
+This will start the server at https://localhost:7202
 
 2. Run the frontend:
 
-   In Gamesmarket\Gamesmarket.ReactWeb> 
+   In Gamesmarket\Gamesmarket.ReactWeb
+   ```sh
+   npm install
+   ```
    ```sh
    npm run dev
    ```
-3. To use the Logger, you need to specify the path in nlog.config to the Logs folder 
+This will start the frontend at https://localhost:3000
+   
+3. To use the Logger, you need to specify the path in nlog.config to the Logs folder
+
+4. Data to log in as admin user: Email - admin@gmail.com Password - Qwe!23
