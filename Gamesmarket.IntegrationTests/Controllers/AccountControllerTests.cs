@@ -2,6 +2,7 @@ using Xunit;
 using FluentAssertions;
 using Gamesmarket.Domain.Entity;
 using Gamesmarket.Domain.ViewModel.Identity;
+using Gamesmarket.Domain.Response;
 using Gamesmarket.IntegrationTests.Helper;
 using Gamesmarket.DAL;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,7 @@ using Newtonsoft.Json;
 using System.Net;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Gamesmarket.Domain.Enum;
 
 namespace Gamesmarket.IntegrationTests.Controllers
 {
@@ -66,7 +68,16 @@ namespace Gamesmarket.IntegrationTests.Controllers
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var authResponse = JsonConvert.DeserializeObject<AuthResponse>(await response.Content.ReadAsStringAsync());
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<BaseResponse<AuthResponse>>(responseContent);
+
+            // Validate the response
+            responseObject.Should().NotBeNull();
+            responseObject.StatusCode.Should().Be(StatusCode.OK);
+
+            // Validate the authentication data
+            var authResponse = responseObject.Data;
             authResponse.Should().NotBeNull();
             authResponse.Username.Should().Be("testuser");
             authResponse.Email.Should().Be("test@gmail.com");
@@ -104,7 +115,16 @@ namespace Gamesmarket.IntegrationTests.Controllers
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var authResponse = JsonConvert.DeserializeObject<AuthResponse>(await response.Content.ReadAsStringAsync());
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<BaseResponse<AuthResponse>>(responseContent);
+
+            // Validate the response
+            responseObject.Should().NotBeNull();
+            responseObject.StatusCode.Should().Be(StatusCode.OK);
+
+            // Validate the authentication data
+            var authResponse = responseObject.Data;
             authResponse.Should().NotBeNull();
             authResponse.Username.Should().Be("newuser@gmail.com");
             authResponse.Email.Should().Be("newuser@gmail.com");
@@ -142,11 +162,18 @@ namespace Gamesmarket.IntegrationTests.Controllers
 
             // Assert
             tokenResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-            var newTokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await tokenResponse.Content.ReadAsStringAsync());
-            newTokens["accessToken"].Should().NotBeNullOrEmpty();
-            newTokens["refreshToken"].Should().NotBeNullOrEmpty();
-            newTokens["accessToken"].Should().NotBe(adminAccessToken);
-            newTokens["refreshToken"].Should().NotBe(adminRefreshToken);
+
+            var responseContent = await tokenResponse.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<BaseResponse<TokenModel>>(responseContent);
+
+            responseObject.Should().NotBeNull();
+            responseObject.StatusCode.Should().Be(StatusCode.OK);
+
+            var newTokens = responseObject.Data;
+            newTokens.AccessToken.Should().NotBeNullOrEmpty();
+            newTokens.RefreshToken.Should().NotBeNullOrEmpty();
+            newTokens.AccessToken.Should().NotBe(adminAccessToken);
+            newTokens.RefreshToken.Should().NotBe(adminRefreshToken);
         }
 
         [Fact]
@@ -171,6 +198,12 @@ namespace Gamesmarket.IntegrationTests.Controllers
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<BaseResponse<string>>(responseContent);
+
+            responseObject.StatusCode.Should().Be(StatusCode.OK);
+
             // Verify refresh token is null
             using (var scope = _factory.Services.CreateScope())
             {
@@ -201,6 +234,12 @@ namespace Gamesmarket.IntegrationTests.Controllers
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<BaseResponse<string>>(responseContent);
+
+            responseObject.StatusCode.Should().Be(StatusCode.OK);
+
             // Verify all refresh tokens of all users are null
             using (var scope = _factory.Services.CreateScope())
             {
@@ -269,8 +308,13 @@ namespace Gamesmarket.IntegrationTests.Controllers
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
+
             var responseContent = await response.Content.ReadAsStringAsync();
-            responseContent.Should().Contain("Role of user 'test@gmail.com' changed to 'Moderator'"); // Check for success message
+            var responseObject = JsonConvert.DeserializeObject<BaseResponse<string>>(responseContent);
+
+            responseObject.StatusCode.Should().Be(StatusCode.OK);
+            responseObject.Data.Should().Contain("Role of user 'test@gmail.com' changed to 'Moderator'"); // Check for success message
+            
             // Ensure the role was updated
             using (var scope = _factory.Services.CreateScope())
             {

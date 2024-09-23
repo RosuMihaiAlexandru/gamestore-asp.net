@@ -61,7 +61,7 @@ Gamesmarket - the main project, which includes configuration and initialization 
 **Backend api**
 ![api](https://github.com/user-attachments/assets/2aee45ed-fc12-4145-8b45-66d4d9821428)
 
-## Running the Project.
+## Running the Project(Local).
 
 1. Run the backend:
 
@@ -93,3 +93,7 @@ This will start the frontend at https://localhost:3000
 3. To use the Logger, you need to specify the path in nlog.config to the Logs folder
 
 4. Data to log in as admin user: Email - admin@gmail.com Password - Qwe!23
+
+## Running the Project(Docker).
+
+Go to the "test" branch of this repository.

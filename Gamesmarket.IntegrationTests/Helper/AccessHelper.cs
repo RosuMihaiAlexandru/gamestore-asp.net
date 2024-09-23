@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using Gamesmarket.Domain.Enum;
+using Gamesmarket.Domain.Response;
 using Gamesmarket.Domain.ViewModel.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
@@ -28,7 +30,13 @@ namespace Gamesmarket.IntegrationTests.Helper
             var response = await client.PostAsync(HttpHelper.Urls.Authenticate, HttpHelper.GetJsonHttpContent(authRequest));
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var authResponse = JsonConvert.DeserializeObject<AuthResponse>(await response.Content.ReadAsStringAsync());
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<BaseResponse<AuthResponse>>(responseContent);
+
+            responseObject.Should().NotBeNull();
+            responseObject.StatusCode.Should().Be(StatusCode.OK);
+
+            var authResponse = responseObject.Data;
             var accessToken = authResponse.Token;
             var refreshToken = authResponse.RefreshToken;
             return Tuple.Create(accessToken, refreshToken);
@@ -46,7 +54,13 @@ namespace Gamesmarket.IntegrationTests.Helper
             var response = await client.PostAsync(HttpHelper.Urls.Authenticate, HttpHelper.GetJsonHttpContent(authRequest));
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var authResponse = JsonConvert.DeserializeObject<AuthResponse>(await response.Content.ReadAsStringAsync());
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseObject = JsonConvert.DeserializeObject<BaseResponse<AuthResponse>>(responseContent);
+
+            responseObject.Should().NotBeNull();
+            responseObject.StatusCode.Should().Be(StatusCode.OK);
+
+            var authResponse = responseObject.Data;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResponse.Token);
             return client;
         }
